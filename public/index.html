@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programări Manichiură</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Calendar Programări</h1>
+  <div id="calendar"></div>
+
+  <div id="booking-form" style="display:none;">
+    <h2>Rezervare</h2>
+    <p id="selected-date"></p>
+    <label for="service">Serviciu:</label>
+    <select id="service">
+      <option value="0">Curățare</option>
+      <option value="1">Balerina</option>
+      <option value="2">Slim</option>
+      <option value="3">Pătrat</option>
+      <option value="4">Pătrat ascuțit</option>
+      <option value="5">Oval</option>
+      <option value="6">Stiletto</option>
+    </select>
+
+    <label for="time">Ora:</label>
+   <select id="time">
+  <option value="10:00">10:00</option>
+  <option value="11:00">11:00</option>
+  <option value="12:00">12:00</option>
+  <option value="13:00">13:00</option>
+  <option value="14:00">14:00</option>
+  <option value="15:00">15:00</option>
+</select>
+    <input type="text" id="phone" placeholder="Număr de telefon">
+    <button id="book-btn">Rezervă</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
