@@ -1,29 +1,33 @@
+// 🔹 Importuri
 const express = require("express");
-const cors = require("cors");
+const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const connectDB = require("./config/db");
 const path = require("path");
 
 dotenv.config();
-connectDB();
 
 const app = express();
 
-app.use(cors());
+// 🔹 Middleware
 app.use(express.json());
 
-// Serve ftontend
+// 🔹 Serve static frontend
 app.use(express.static(path.join(__dirname, "public")));
 
-//app.get("/", (req, res) => {
- // res.send("API is running...");
-//});
+// 🔹 Conectare MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.error("Mongo error:", err));
 
+// 🔹 Routes
 const bookingRoutes = require("./routes/bookings");
 app.use("/api/bookings", bookingRoutes);
 
-const PORT = 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// 🔹 Test route
+app.get("/", (req, res) => {
+  res.send("API is running...");
 });
+
+// 🔹 Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log("Server running on port", PORT));

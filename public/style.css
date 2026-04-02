@@ -1,7 +1,19 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #f5f6fa;
+  font-family: Arial;
+  background: linear-gradient(135deg, grey, purple);
   margin: 0;
+}
+.month{
+width:100%;
+color:white;
+height:20px;
+font-size:17px;
+font-weight:bold;
+}
+.container {
+  
+  max-width: 900px;
+  margin: auto;
   padding: 20px;
 }
 
@@ -9,60 +21,213 @@ h1 {
   text-align: center;
 }
 
-#calendar {
+.calendar {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 12px;
-  max-width: 900px;
-  margin: 20px auto;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
 }
 
 .day {
-  padding: 15px;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 5px;
   text-align: center;
-  color: white;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: 0.3s;
+  color: white;
+  font-weight: bold;
+ box-shadow:inset 0 -30px 00 #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .day:hover {
   transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  opacity: 0.9;
 }
 
-.green { background: #4CAF50; }
-.yellow { background: #FFC107; color: black; }
-.red { background: #F44336; }
-
-#booking-form {
-  max-width: 400px;
-  margin: 30px auto;
-  background: white;
+.card {
   padding: 20px;
-  border-radius: 10px;
+  margin-top: 20px;
+  border-radius: 15px;
   box-shadow: 0 5px 20px rgba(0,0,0,0.1);
 }
 
-select, input {
+
+#services {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.service {
+  cursor: pointer;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: 0.3s;
+  border: 2px solid transparent;
+}
+
+.service img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.service p {
+  text-align: center;
+  margin: 5px;
+}
+
+.service:hover {
+  transform: scale(1.05);
+}
+
+.service.selected {
+  border: 2px solid black;
+}
+
+.btn {
   width: 100%;
   padding: 10px;
   margin-top: 10px;
-  margin-bottom: 15px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  background: #4CAF50;
-  color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
+  background: black;
+  color: white;
   cursor: pointer;
 }
 
-button:hover {
-  background: #45a049;
+.btn.confirm {
+  background: green;
+}
+.profil-card {
+  max-width: 500px;
+  margin: auto;
+  text-align: center;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+   background: linear-gradient(135deg, pink, purple);
+}
+
+.profil-img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.programare-section {
+  margin-top: 20px;
+}
+
+#services-select {
+  margin-top: 15px;
+}
+
+.hidden { display: none; }
+.time-select{
+width:100%;
+padding:12px;
+border-radius:10px;
+margin:10px 0;
+font-size:16px;
+border:2px solid #cccccc;
+}
+.modal-content {
+  background:pink;
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  animation: fadeIn 0.3s ease;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+}
+
+.modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+@keyframes fadeIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.day {
+  transition: all 0.2s ease;
+}
+
+.day:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.service {
+  transition: 0.2s;
+}
+
+.service:hover {
+  transform: scale(1.05);
+}
+
+.service.selected {
+  border: 2px solid #000;
+  transform: scale(1.08);
+}
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: black;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.toast.show {
+  opacity: 1;
+}
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, black, purple) ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader::after {
+  content: "";
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ccc;
+  border-top: 4px solid black;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

@@ -1,42 +1,68 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Programări unghii profesionale. Rezervă rapid online.">
+<title>Madalina Nails | Programări Unghii</title>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Programări Manichiură</title>
+  <title>Profil</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Calendar Programări</h1>
-  <div id="calendar"></div>
+<!-- <div id="loader" class="loader hidden"></div> -->
+<div class="container">
 
-  <div id="booking-form" style="display:none;">
-    <h2>Rezervare</h2>
-    <p id="selected-date"></p>
-    <label for="service">Serviciu:</label>
-    <select id="service">
-      <option value="0">Curățare</option>
-      <option value="1">Balerina</option>
-      <option value="2">Slim</option>
-      <option value="3">Pătrat</option>
-      <option value="4">Pătrat ascuțit</option>
-      <option value="5">Oval</option>
-      <option value="6">Stiletto</option>
-    </select>
+  <!-- Card profil + programare inițial -->
+  <div id="card" class="card profil-card">
+    <img src="images/manichiurista.jpg" class="profil-img dinamic" alt="Manichiurista">
+    <h2 class="dinamic">Madalina Nails</h2>
+    <p class="descriere dinamic ">
+      Sunt manichiuristă profesionista, pasionată de design-uri unice și personalizate.
+    </p>
 
-    <label for="time">Ora:</label>
-   <select id="time">
-  <option value="10:00">10:00</option>
-  <option value="11:00">11:00</option>
-  <option value="12:00">12:00</option>
-  <option value="13:00">13:00</option>
-  <option value="14:00">14:00</option>
-  <option value="15:00">15:00</option>
-</select>
-    <input type="text" id="phone" placeholder="Număr de telefon">
-    <button id="book-btn">Rezervă</button>
-  </div>
+    <div class="buttons-top">
+      <button class="btn dinamic" id="showCalendarBtn">Programează</button>
+      <button class="btn dinamic " onclick="window.open('album.html','_blank')">Vezi colecții & servicii</button>
+    </div>
 
-  <script src="script.js"></script>
+    <!-- Calendar ascuns inițial -->
+    <div id="calendar" class="calendar hidden"></div>
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+ 
+    <!-- Form programare -->
+
+    <div id="booking-form" class="">
+      <h3 id="selected-date"></h3>
+
+      <select id="time" class="time-select">
+      <option value="">Selectează ora</option>
+      </select>
+      <input  id="name" placeholder="Nume" autocomplete="name">
+      <input id="phone" placeholder="Telefon" autocomplete="tel">
+
+      <!-- Checkbox servicii opționale -->
+      <br><label style="width:100%">
+        <input type="checkbox" id="showServices"> Stiu ce vreau!
+      </label>
+
+      <!-- Servicii cu poze -->
+      <div id="services-select" class="hidden">
+        <div id="services"></div>
+      </div>
+
+      <button class="btn" onclick="initBooking()">Trimite cod</button>
+      <div id="otp-section" class="hidden">
+        <input id="otp" placeholder="Cod SMS" autocomplete="one-time-code">
+        <button class="btn confirm" onclick="confirmBooking()">Confirmă</button>
+      </div>
+    </div> 
+ </div>
+</div>
+</div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="script.js"></script>
 </body>
 </html>
