@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 
-// Schema pentru programari
-const BookingSchema = new mongoose.Schema({
-  service: Number, //tip serviciu
-  date: String,   //data (YYYY-MM-DD)
-  time: String,  //ora
-  phone: String, // telefon client
-  confirmed: { type: Boolean, default: false }
+const bookingSchema = new mongoose.Schema({
+  date: String,
+  time: String,
+  name: String,
+  phone: String,
+  service: {
+    type: Number,
+    default: null
+  }
 });
 
-module.exports = mongoose.model("Booking", BookingSchema);
+module.exports = mongoose.model("Booking", bookingSchema);

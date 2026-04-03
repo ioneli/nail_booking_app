@@ -1,33 +1,66 @@
-// 🔹 Importuri
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const path = require("path");
-
-dotenv.config();
+const session = require("express-session");
+const passport = require("passport");
 
 const app = express();
 
+// 🔹 Debug ENV
+console.log("MONGO:", process.env.MONGO_URI);
+
 // 🔹 Middleware
 app.use(express.json());
-
-// 🔹 Serve static frontend
 app.use(express.static(path.join(__dirname, "public")));
 
-// 🔹 Conectare MongoDB
+// 🔹 Session
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}));
+
+// 🔹 Passport
+require("./config/passport")(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+
+// 🔹 MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.error("Mongo error:", err));
 
 // 🔹 Routes
-const bookingRoutes = require("./routes/bookings");
-app.use("/api/bookings", bookingRoutes);
+app.use("/api/bookings", require("./routes/bookings"));
 
-// 🔹 Test route
-app.get("/", (req, res) => {
-  res.send("API is running...");
+// 🔹 Google Auth
+app.get("/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+app.get("/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/admin",
+    failureRedirect: "/"
+  })
+);
+app.get("/admin", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.sendFile(path.join(__dirname, "public/admin.html"));
+  } else {
+    res.redirect("/");
+  }
 });
 
-// 🔹 Start server
+// log out
+app.get("/auth/logout", (req, res) => {
+  req.logout(() => {
+    res.redirect("/");
+  });
+});
+
+// 🔹 Start
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("Server running on port", PORT));

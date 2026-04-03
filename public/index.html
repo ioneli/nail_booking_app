@@ -1,68 +1,89 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Programări unghii profesionale. Rezervă rapid online.">
-<title>Madalina Nails | Programări Unghii</title>
   <meta charset="UTF-8">
-  <title>Profil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Programări unghii profesionale. Rezervă rapid online.">
+  <title>Madalina Nails | Programări Unghii</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- <div id="loader" class="loader hidden"></div> -->
+
+<div id="loader" class="loader hidden"></div>
 <div class="container">
 
   <!-- Card profil + programare inițial -->
-  <div id="card" class="card profil-card">
-    <img src="images/manichiurista.jpg" class="profil-img dinamic" alt="Manichiurista">
-    <h2 class="dinamic">Madalina Nails</h2>
-    <p class="descriere dinamic ">
-      Sunt manichiuristă profesionista, pasionată de design-uri unice și personalizate.
+  <div class="card profil-card">
+    <img src="images/manichiurista.jpg" class="profil-img" alt="Manichiurista">
+    <h2>Madalina Nails</h2>
+    <p class="descriere">
+      Sunt manichiuristă profesionistă, pasionată de design-uri unice și personalizate.
     </p>
 
     <div class="buttons-top">
-      <button class="btn dinamic" id="showCalendarBtn">Programează</button>
-      <button class="btn dinamic " onclick="window.open('album.html','_blank')">Vezi colecții & servicii</button>
+      <button class="btn" id="showCalendarBtn">Programează</button>
+      <button class="btn" id="viewCollectionsBtn">Vezi colecții & servicii</button>
     </div>
 
-    <!-- Calendar ascuns inițial -->
-    <div id="calendar" class="calendar hidden"></div>
-<div id="modal" class="modal hidden">
-  <div class="modal-content">
- 
-    <!-- Form programare -->
+    <!-- Calendar --><!-- 📅 Calendar Container -->
+<div id="calendar-container" class="hidden">
 
-    <div id="booking-form" class="">
-      <h3 id="selected-date"></h3>
+  <!-- Header -->
+  <div class="calendar-top">
+    <button id="prevMonth">←</button>
+    <h3 id="monthTitle"></h3>
+    <button id="nextMonth">→</button>
+  </div>
 
-      <select id="time" class="time-select">
-      <option value="">Selectează ora</option>
-      </select>
-      <input  id="name" placeholder="Nume" autocomplete="name">
-      <input id="phone" placeholder="Telefon" autocomplete="tel">
+  <!-- Weekdays -->
+  <div class="calendar-header">
+    <div>L</div>
+    <div>M</div>
+    <div>M</div>
+    <div>J</div>
+    <div>V</div>
+    <div>S</div>
+    <div>D</div>
+  </div>
 
-      <!-- Checkbox servicii opționale -->
-      <br><label style="width:100%">
-        <input type="checkbox" id="showServices"> Stiu ce vreau!
-      </label>
+  <!-- Days -->
+  <div id="calendar" class="calendar"></div>
 
-      <!-- Servicii cu poze -->
-      <div id="services-select" class="hidden">
-        <div id="services"></div>
-      </div>
-
-      <button class="btn" onclick="initBooking()">Trimite cod</button>
-      <div id="otp-section" class="hidden">
-        <input id="otp" placeholder="Cod SMS" autocomplete="one-time-code">
-        <button class="btn confirm" onclick="confirmBooking()">Confirmă</button>
-      </div>
-    </div> 
- </div>
 </div>
-</div>
+    <!-- Modal pentru booking -->
+    <div id="modal" class="modal hidden">
+      <div class="modal-content">
+
+        <h3 id="selected-date"></h3>
+
+        <select id="time">
+          <option value="">Selectează ora</option>
+        </select>
+
+        <input id="name" placeholder="Nume" autocomplete="name">
+        <input id="phone" placeholder="Telefon" autocomplete="tel">
+
+        <label>
+          <input type="checkbox" id="showServices"> Vreau să selectez serviciul
+        </label>
+
+        <div id="services-select" class="hidden">
+          <div id="services"></div>
+        </div>
+
+        <button class="btn" id="initBookingBtn">Trimite cod</button>
+
+        <div id="otp-section" class="hidden">
+          <input id="otp" placeholder="Cod SMS" autocomplete="one-time-code">
+          <button class="btn confirm" id="confirmBookingBtn">Confirmă</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="toast" class="toast"></div>
-<script src="script.js"></script>
+<script type="module" src="script.js"></script>
 </body>
 </html>

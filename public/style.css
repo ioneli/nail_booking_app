@@ -1,203 +1,229 @@
-body {
-  font-family: Arial;
-  background: linear-gradient(135deg, grey, purple);
+/* 🔹 RESET */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
 }
-.month{
-width:100%;
-color:white;
-height:20px;
-font-size:17px;
-font-weight:bold;
+
+body {
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  color: #333;
 }
+
+/* 🔹 CONTAINER */
 .container {
-  
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-}
-
-h1 {
-  text-align: center;
-}
-
-.calendar {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 2px;
-}
-
-.day {
-  padding: 10px;
-  border-radius: 5px;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.3s;
-  color: white;
-  font-weight: bold;
- box-shadow:inset 0 -30px 00 #000;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
-.day:hover {
-  transform: scale(1.05);
-  opacity: 0.9;
-}
-
-.card {
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-}
-
-
-#services {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.service {
-  cursor: pointer;
-  border-radius: 10px;
-  overflow: hidden;
-  transition: 0.3s;
-  border: 2px solid transparent;
-}
-
-.service img {
-  width: 100%;
-  height: 100px;
-  object-fit: cover;
-}
-
-.service p {
-  text-align: center;
-  margin: 5px;
-}
-
-.service:hover {
-  transform: scale(1.05);
-}
-
-.service.selected {
-  border: 2px solid black;
-}
-
-.btn {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 10px;
-  background: black;
-  color: white;
-  cursor: pointer;
-}
-
-.btn.confirm {
-  background: green;
-}
-.profil-card {
   max-width: 500px;
   margin: auto;
-  text-align: center;
   padding: 20px;
+}
+
+/* 🔹 CARD */
+.card {
+  background: #fff;
   border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-   background: linear-gradient(135deg, pink, purple);
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  text-align: center;
 }
 
+/* 🔹 PROFILE */
 .profil-img {
-  width: 200px;
-  height: 200px;
+  width: 100px;
   border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
-.programare-section {
+.descriere {
+  font-size: 14px;
+  margin: 10px 0;
+  color: #666;
+}
+
+/* 🔹 BUTTONS */
+.btn {
+  background: linear-gradient(135deg, #ff7eb3, #ff758c);
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  margin: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.confirm {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+/* 🔹 CALENDAR CONTAINER */
+#calendar-container {
   margin-top: 20px;
 }
 
-#services-select {
-  margin-top: 15px;
+/* 🔹 TOP BAR */
+.calendar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.hidden { display: none; }
-.time-select{
-width:100%;
-padding:12px;
-border-radius:10px;
-margin:10px 0;
-font-size:16px;
-border:2px solid #cccccc;
+.calendar-top h3 {
+  font-size: 18px;
 }
-.modal-content {
-  background:pink;
-  padding: 20px;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 400px;
-  animation: fadeIn 0.3s ease;
+
+.calendar-top {
+  background: #fff;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
 }
+
+/* 🔹 WEEK HEADER */
+.calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  color: #777;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+/* 🔹 GRID */
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+/* 🔹 DAY CARD */
+.day {
+  background: white;
+  border-radius: 14px;
+  padding: 8px;
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* hover */
+.day:hover {
+  transform: translateY(-2px);
+}
+
+/* 🔹 NUMBER */
+.day strong {
+  font-size: 16px;
+}
+
+/* 🔹 FREE SLOTS */
+.day small {
+  font-size: 10px;
+}
+
+/* 🔹 COLORS */
+.day.green { background: #d4f8d4; }
+.day.orange { background: #ffe4b5; }
+.day.red { background: #ffc0c0; }
+.day.gray { background: #eee; color: #aaa;cursor:not-allowed }
+
+/* 🔹 TODAY */
+.day.today {
+  border: 2px solid #ff758c;
+}
+
+/* 🔹 EMPTY CELLS */
+.day.empty {
+  background: transparent;
+  box-shadow: none;
+  cursor: default;
+}
+
+/* 🔹 MODAL */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
-
-  display: flex;
-  align-items: center;
+  background: rgba(0,0,0,0.6);
+  display: none;
   justify-content: center;
-
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.3s ease;
+  align-items: center;
 }
 
 .modal.active {
-  opacity: 1;
-  pointer-events: all;
+  display: flex;
 }
 
-@keyframes fadeIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-.day {
-  transition: all 0.2s ease;
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  animation: fadeIn 0.3s ease;
 }
 
-.day:hover {
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+/* 🔹 INPUTS */
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+/* 🔹 SERVICES */
+#services {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }
 
 .service {
+  border: 2px solid transparent;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
   transition: 0.2s;
 }
 
-.service:hover {
-  transform: scale(1.05);
+.service img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+}
+
+.service p {
+  font-size: 12px;
+  padding: 5px;
 }
 
 .service.selected {
-  border: 2px solid #000;
-  transform: scale(1.08);
+  border: 2px solid #ff758c;
 }
+
+/* 🔹 TOAST */
 .toast {
   position: fixed;
   bottom: 20px;
-  right: 20px;
-  background: black;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
   color: white;
-  padding: 12px 20px;
+  padding: 10px 20px;
   border-radius: 10px;
   opacity: 0;
   transition: 0.3s;
@@ -206,28 +232,72 @@ border:2px solid #cccccc;
 .toast.show {
   opacity: 1;
 }
+
+/* 🔹 LOADER */
 .loader {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, black, purple) ;
+  background:white;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;
 }
 
 .loader::after {
   content: "";
   width: 40px;
   height: 40px;
-  border: 4px solid #ccc;
-  border-top: 4px solid black;
+  border: 4px solid #ff758c;
+  border-top: 4px solid transparent;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
+/* 🔹 ADMIN TABLE */
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+td, th {
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  font-size: 14px;
+}
+
+button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: red;
+  color: white;
+  cursor: pointer;
+}
+
+/* 🔹 UTIL */
+.hidden {
+  display: none;
+}
+
+/* 🔹 ANIMATIONS */
+@keyframes fadeIn {
+  from {opacity: 0; transform: scale(0.9);}
+  to {opacity: 1; transform: scale(1);}
+}
+
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {transform: rotate(360deg);}
+}
+
+/* 🔹 MOBILE */
+@media(max-width: 500px) {
+  .day {
+    font-size: 10px;
+    padding: 8px 3px;
+  }
 }

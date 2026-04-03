@@ -1,26 +1,42 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Madalina Nails</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="container">
+  <h1>Admin - Programări</h1>
 
-<h1>Admin - Programări</h1>
+  <!-- Bookings Table -->
+  <table id="bookings-table"></table>
 
-<table style="width:90%; margin:auto; border-collapse: collapse; background:white;">
-  <thead>
-    <tr style="background:#4CAF50; color:white;">
-      <th>Data</th>
-      <th>Ora</th>
-      <th>Serviciu</th>
-      <th>Telefon</th>
-      <th>Acțiune</th>
-    </tr>
-  </thead>
-  <tbody id="bookings-table"></tbody>
-</table>
+  <!-- Add New Booking Form -->
+  <h2>Adaugă programare nouă</h2>
+  <form id="add-booking-form">
+    <div class="form-row">
+      <label>Data: <input type="date" name="date" required></label>
+      <label>Ora: <input type="time" name="time" required></label>
+    </div>
+    <div class="form-row">
+      <label>Nume: <input type="text" name="name" placeholder="Nume" required></label>
+      <label>Telefon: <input type="text" name="phone" placeholder="Telefon" required></label>
+    </div>
+    <div class="form-row">
+      <label>Serviciu: <input type="text" name="service" placeholder="Serviciu opțional"></label>
+    </div>
+    <button type="submit" class="btn">Adaugă programare</button>
+  </form>
+<button onclick="logout()">Logout</button>
+
+<script>
+function logout() {
+  window.location.href = "/auth/logout";
+}
+</script>
+</div>
 
 <script src="admin.js"></script>
 </body>
