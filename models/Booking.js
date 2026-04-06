@@ -6,7 +6,7 @@ const bookingSchema = new mongoose.Schema({
   name: String,
   phone: String,
   service: {
-    type: Number,
+    type: String,
     default: null
   }
 });

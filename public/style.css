@@ -1,4 +1,4 @@
-/* 🔹 RESET */
+/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -7,29 +7,30 @@
 }
 
 body {
-  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  background: linear-gradient(135deg, #ff7eb3, #ff758c);
   color: #333;
 }
 
-/* 🔹 CONTAINER */
+/*  CONTAINER */
 .container {
   max-width: 500px;
   margin: auto;
-  padding: 20px;
+  padding: 10px;
 }
 
-/* 🔹 CARD */
+/*  CARD */
 .card {
-  background: #fff;
+  background: linear-gradient(135deg, #ffffff, #d5a6bd);
   border-radius: 20px;
   padding: 20px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   text-align: center;
 }
 
-/* 🔹 PROFILE */
+/*  PROFILE */
 .profil-img {
-  width: 100px;
+  width: 150px;
+  height:150px;
   border-radius: 50%;
   margin-bottom: 10px;
 }
@@ -40,8 +41,9 @@ body {
   color: #666;
 }
 
-/* 🔹 BUTTONS */
+/*  BUTTONS */
 .btn {
+  font-size: 20px;
   background: linear-gradient(135deg, #ff7eb3, #ff758c);
   border: none;
   padding: 12px;
@@ -57,15 +59,17 @@ body {
   transform: scale(1.05);
 }
 
+#viewCollectionsBtn{text-align:left; display:block; margin-left:5%;padding:2px;border-radius: 5px;}
+#prevMonth, #nextMonth{font-size:30px;margin:10px;}
 .confirm {
   background: linear-gradient(135deg, #4facfe, #00f2fe);
 }
-/* 🔹 CALENDAR CONTAINER */
+/*  CALENDAR CONTAINER */
 #calendar-container {
   margin-top: 20px;
 }
 
-/* 🔹 TOP BAR */
+/*  TOP BAR */
 .calendar-top {
   display: flex;
   justify-content: space-between;
@@ -78,13 +82,14 @@ body {
 }
 
 .calendar-top {
-  background: #fff;
+  height:50px;
   border: none;
+  text-align:center;
   font-size: 18px;
   cursor: pointer;
 }
 
-/* 🔹 WEEK HEADER */
+/*  WEEK HEADER */
 .calendar-header {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -94,14 +99,14 @@ body {
   font-size: 13px;
 }
 
-/* 🔹 GRID */
+/*  GRID */
 .calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
 }
 
-/* 🔹 DAY CARD */
+/*  DAY CARD */
 .day {
   background: white;
   border-radius: 14px;
@@ -122,42 +127,42 @@ body {
   transform: translateY(-2px);
 }
 
-/* 🔹 NUMBER */
+/*  NUMBER */
 .day strong {
   font-size: 16px;
 }
 
-/* 🔹 FREE SLOTS */
+/*  FREE SLOTS */
 .day small {
   font-size: 10px;
 }
 
-/* 🔹 COLORS */
+/*  COLORS */
 .day.green { background: #d4f8d4; }
 .day.orange { background: #ffe4b5; }
 .day.red { background: #ffc0c0; }
 .day.gray { background: #eee; color: #aaa;cursor:not-allowed }
 
-/* 🔹 TODAY */
+/*  TODAY */
 .day.today {
   border: 2px solid #ff758c;
 }
 
-/* 🔹 EMPTY CELLS */
+/*  EMPTY CELLS */
 .day.empty {
   background: transparent;
   box-shadow: none;
   cursor: default;
 }
 
-/* 🔹 MODAL */
+/*  MODAL */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.6);
+ 
   display: none;
   justify-content: center;
   align-items: center;
@@ -168,7 +173,10 @@ body {
 }
 
 .modal-content {
-  background: white;
+  max-height: 90vh;       /* limits height */
+  overflow-y: auto;       /* enables vertical scroll */
+  -webkit-overflow-scrolling: touch; /* smooth on iPhone */
+  background: linear-gradient(135deg, #ffffff, #741b47);
   padding: 20px;
   border-radius: 20px;
   width: 90%;
@@ -176,7 +184,7 @@ body {
   animation: fadeIn 0.3s ease;
 }
 
-/* 🔹 INPUTS */
+/*  INPUTS */
 input, select {
   width: 100%;
   padding: 10px;
@@ -185,7 +193,7 @@ input, select {
   border: 1px solid #ddd;
 }
 
-/* 🔹 SERVICES */
+/*  SERVICES */
 #services {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -215,7 +223,7 @@ input, select {
   border: 2px solid #ff758c;
 }
 
-/* 🔹 TOAST */
+/*  TOAST */
 .toast {
   position: fixed;
   bottom: 20px;
@@ -233,7 +241,7 @@ input, select {
   opacity: 1;
 }
 
-/* 🔹 LOADER */
+/*  LOADER */
 .loader {
   position: fixed;
   top: 0;
@@ -257,7 +265,7 @@ input, select {
   animation: spin 1s linear infinite;
 }
 
-/* 🔹 ADMIN TABLE */
+/*  ADMIN TABLE */
 table {
   width: 100%;
   margin-top: 20px;
@@ -274,17 +282,16 @@ button {
   padding: 6px 10px;
   border: none;
   border-radius: 6px;
-  background: red;
+  background: rgba(0,0,0,0.5);
   color: white;
   cursor: pointer;
 }
 
-/* 🔹 UTIL */
+/*  UTIL */
 .hidden {
   display: none;
 }
-
-/* 🔹 ANIMATIONS */
+/*  ANIMATIONS */
 @keyframes fadeIn {
   from {opacity: 0; transform: scale(0.9);}
   to {opacity: 1; transform: scale(1);}
@@ -294,10 +301,155 @@ button {
   to {transform: rotate(360deg);}
 }
 
-/* 🔹 MOBILE */
+/*  MOBILE */
 @media(max-width: 500px) {
   .day {
     font-size: 10px;
     padding: 8px 3px;
+  }
+}
+#calendar-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+/* swipe directions */
+
+#calendar {
+  touch-action: pan-y;
+   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), filter 0.35s ease;
+}
+.slide-left {
+  transform: translateX(33%);
+  filter: blur(4px);
+}
+
+.slide-right {
+  transform: translateX(-33%);
+  filter: blur(4px);
+}
+
+.slide-in-left {
+  transform: translateX(-100%);
+  opacity:0;
+}
+
+.slide-in-right {
+  transform: translateX(100%);
+  opacity:0;
+}
+
+/* reset (revine la normal) */
+.reset_position{
+  transform: translateX(0);
+  opacity: 1;
+  transition:opacity 0.35s ease;
+
+}
+
+#swiper_box {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.swiper {
+  position: relative;
+  overflow: hidden;
+  max-height:300px;
+  max-width: 400px;
+  margin: auto;
+}
+
+.swiper-track {
+  display: flex;
+  will-change: transform;
+}
+
+.slide {
+  flex: 0 0 auto;
+  padding: 5px;
+}
+
+.slide img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #eee;
+}
+
+/* Navigation */
+.nav {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 2;
+  font-size:50px;font-weight:bold;
+}
+.nav:hover, .dot:hover, .active:hover{ background: linear-gradient(135deg, #7b2ff7, #f107a3);}
+.prev { left: 10px; }
+.next { right: 10px; }
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  background: #ccc;
+  margin: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dot.active {
+  background: #333;
+  width: 20px;
+  border-radius: 30%;   
+}
+/*  glitter */
+.glitter-purple {
+  background: linear-gradient(135deg, #7b2ff7, #f107a3);
+  color: white;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 10px rgba(123, 47, 247, 0.6),
+    0 0 20px rgba(241, 7, 163, 0.4),
+    inset 0 0 10px rgba(255,255,255,0.2);
+}
+.glitter-purple::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1.5px 1.5px at 70% 60%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(2px 2px at 40% 80%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 90% 20%, rgba(255,255,255,0.8), transparent);
+  animation: sparkle 4s linear infinite;
+  pointer-events: none;
+}
+@keyframes sparkle {
+  0% {
+    transform: translateY(0px);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 0.7;
   }
 }

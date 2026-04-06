@@ -7,13 +7,13 @@ let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 
 const servicesData = [
-  { id: 0, name: "Curățare", img: "images/curatare.jpg" },
-  { id: 1, name: "Balerina", img: "images/balerina.jpg" },
-  { id: 2, name: "Slim", img: "images/slim.jpg" },
-  { id: 3, name: "Pătrat", img: "images/patrat.jpg" },
-  { id: 4, name: "Pătrat arcuit", img: "images/patrat-arcuit.jpg" },
-  { id: 5, name: "Oval", img: "images/oval.jpg" },
-  { id: 6, name: "Stiletto", img: "images/stiletto.jpg" }
+  { id: 0, name: "Semi", img: "images/nailss/semi.jpg" },
+  { id: 1, name: "Balerina", img: "images/nailss/balerina.jpg" },
+  { id: 2, name: "Slim", img: "images/nailss/slim.jpg" },
+  { id: 3, name: "Pătrat", img: "images/nailss/patrat.jpg" },
+  { id: 4, name: "Pătrat arcuit", img: "images/nailss/patrat-arcuit.jpg" },
+  { id: 5, name: "Oval", img: "images/nailss/oval.jpg" },
+  { id: 6, name: "Stiletto", img: "images/nailss/stiletto.jpg" }
 ];
 
 // DOM Elements
@@ -27,19 +27,21 @@ const initBookingBtn = document.getElementById("initBookingBtn");
 const confirmBookingBtn = document.getElementById("confirmBookingBtn");
 const prevMonthBtn = document.getElementById("prevMonthBtn");
 const nextMonthBtn = document.getElementById("nextMonthBtn");
-
+const zaswiper = document.getElementById("swiper_box");
 // ------Event listener-----------------
 
 servicesCheckbox.addEventListener("change", e => {
-  servicesContainer.classList.toggle("hidden", !e.target.checked);
-  if (e.target.checked) renderServices();
+  servicesContainer.classList.toggle("hidden", !e.target.checked); 
+ if (e.target.checked) renderServices();
 });
 
 initBookingBtn.addEventListener("click", initBooking);
 confirmBookingBtn.addEventListener("click", confirmBooking);
 
 modal.addEventListener("click", e => {
-  if (e.target.id === "modal") modal.classList.remove("active");
+  if (e.target.id === "modal"){ modal.classList.remove("active");
+      zaswiper.classList.toggle("hidden");}        
+ 
 });
 
 // ---------------------------
@@ -52,7 +54,7 @@ function renderServices() {
     div.className = "service";
     div.innerHTML = `<img src="${s.img}"><p>${s.name}</p>`;
     div.onclick = () => {
-      selectedService = s.id;
+      selectedService = s.name;
       document.querySelectorAll(".service").forEach(el => el.classList.remove("selected"));
       div.classList.add("selected");
     };
@@ -81,25 +83,29 @@ document.getElementById("calendar-container").classList.remove("hidden");
 await loadCalendarData();
 };
 // --month navigation-------
-document.getElementById("prevMonth").onclick = () => {
-  currentMonth--;
-  if (currentMonth < 0) {
-    currentMonth = 11;
-    currentYear--;
-  }
-  renderCalendar();
-};
+function goToNextMonth() {
+  animateCalendar("next", () => {
+    currentMonth++;
+    if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+    renderCalendar();
+  });
+}
 
-document.getElementById("nextMonth").onclick = () => {
-  currentMonth++;
-  if (currentMonth > 11) {
-    currentMonth = 0;
-    currentYear++;
-  }
-  renderCalendar();
-};
-
-
+function goToPrevMonth() {
+  animateCalendar("prev", () => {
+    currentMonth--;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    }
+    renderCalendar();
+  });
+}
+document.getElementById("prevMonth").onclick = goToPrevMonth;
+document.getElementById("nextMonth").onclick = goToNextMonth;
 function renderCalendar() {
   const calendar = document.getElementById("calendar");
   const title = document.getElementById("monthTitle");
@@ -127,7 +133,7 @@ function renderCalendar() {
 
   for (let d = 1; d <= lastDay.getDate(); d++) {
     const dateObj = new Date(currentYear, currentMonth, d);
-    const date = dateObj.toISOString().split("T")[0];
+    const date = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
 
     const dayInfo = calendarData[date];
     const freeSlots = dayInfo ? 4 - dayInfo.booked : 4;
@@ -140,8 +146,8 @@ function renderCalendar() {
     div.className = "day";
 
     // color logic
-    if (isSunday || isPastOrToday) div.classList.add("gray");
-    else if (freeSlots === 0) div.classList.add("red");
+    if (isSunday || isPastOrToday || freeSlots <= 0) div.classList.add("gray");
+    else if (freeSlots ===1) div.classList.add("red");
     else if (freeSlots <= 2) div.classList.add("orange");
     else div.classList.add("green");
 
@@ -157,7 +163,7 @@ function renderCalendar() {
 
     div.innerHTML = `
       <strong>${d}</strong>
-      <small>${isPastOrToday ? "închis" : isSunday ? "închis" : freeSlots + " locuri"}</small>
+      <small>${freeSlots <= 0 ? "închis" :isPastOrToday ? "închis" : isSunday ? "închis" : freeSlots === 1 ? freeSlots + " loc": freeSlots + " locuri"}</small>
     `;
 
     if (!isSunday && freeSlots > 0 && !isPastOrToday) {
@@ -167,6 +173,8 @@ function renderCalendar() {
         generateTimeSlots(occupied);
 
         document.getElementById("modal").classList.add("active");
+        zaswiper.classList.toggle("hidden");        
+
         document.getElementById("selected-date").textContent = date;
       };
     }
@@ -188,7 +196,7 @@ function generateTimeSlots(occupied = []) {
   });
 }
 
-// 6️⃣ Init booking
+//  Init booking
 async function initBooking() {
   const name = document.getElementById("name").value;
   const phone = document.getElementById("phone").value;
@@ -205,7 +213,7 @@ async function initBooking() {
     time,
     phone,
     name,
-    service: document.getElementById("showServices").checked ? selectedService : null
+    service: selectedService,
   };
 
   toggleLoader(true);
@@ -222,6 +230,8 @@ async function initBooking() {
     if (res.ok) {
       showToast("Codul OTP a fost trimis pe telefonul tău!");
       document.getElementById("otp-section").classList.remove("hidden");
+      document.getElementById("services-select").classList.add("hidden");
+      
     } else {
       showToast(data.message || "Eroare la trimiterea OTP");
     }
@@ -233,7 +243,7 @@ async function initBooking() {
 
 }
 
-// 7️⃣ Confirm booking
+// Confirm booking
 async function confirmBooking() {
   const otp = document.getElementById("otp").value;
 
@@ -277,7 +287,77 @@ function showToast(message) {
   toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 3000);
 }
+let touchStartX = 0;
+let touchEndX = 0;
 
+const calendarContainer = document.getElementById("calendar");
+
+// Start touch
+calendarContainer.addEventListener("touchstart", (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+// End touch
+calendarContainer.addEventListener("touchend", (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
+
+function handleSwipe() {
+  const diff = touchStartX - touchEndX;
+
+  // sensitivity (adjust if needed)
+  const threshold = 50;
+
+  if (Math.abs(diff) < threshold) return;
+
+  if (diff > 0) {
+    //  swipe left → next month
+    goToNextMonth();
+  } else {
+    //  swipe right → previous month
+    goToPrevMonth();
+  }
+}
+// animatin calendar
+function animateCalendar(direction, callback) {
+  const calendar = document.getElementById("calendar");
+
+  // remove orice animație veche
+  calendar.classList.remove(
+    "slide-left",
+    "slide-right",
+    "slide-in-left",
+    "slide-in-right"
+  );
+
+  // EXIT (iese din ecran)
+  calendar.classList.add(
+    direction === "next" ? "slide-right" : "slide-left"
+  );
+
+  setTimeout(() => {
+    callback(); // schimbă luna
+
+    
+    // ENTER (intră din partea opusă)
+    calendar.classList.add(
+      direction === "next" ? "slide-in-right" : "slide-in-left"
+    );
+    // reset poziție
+    calendar.classList.remove("slide-left", "slide-right");
+
+    setTimeout(() => {
+    calendar.offsetHeight;
+    calendar.classList.add("reset_position");
+    // curățare după animație
+    setTimeout(() => {
+    
+    calendar.classList.remove("slide-in-left", "slide-in-right", "reset_position");
+    }, 300);
+    }, 300);
+  }, 300);
+}
 window.toggleLoader = toggleLoader = (show) => {
   document.getElementById("loader").classList.toggle("hidden", !show);
 };
@@ -288,3 +368,184 @@ window.showToast = showToast = (message) => {
   toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 3000);
 };
+
+
+// Swiper
+
+class AdvancedSwiper {
+  constructor(el, options = {}) {
+    this.el = el;
+    this.track = el.querySelector('.swiper-track');
+    this.slides = Array.from(this.track.children);
+
+    this.pagination = el.querySelector('.pagination');
+    this.prevBtn = el.querySelector('.prev');
+    this.nextBtn = el.querySelector('.next');
+
+    this.index = 0;
+    this.autoDelay = options.autoDelay || 60000;
+
+    this.velocity = 0;
+    this.lastX = 0;
+    this.lastTime = 0;
+
+    this.init();
+  }
+
+  init() {
+    this.setupResponsive();
+    this.cloneSlides();
+    this.createPagination();
+    this.bindEvents();
+    this.lazyLoad();
+    this.startAuto();
+    this.goTo(this.index, false);
+  }
+
+  setupResponsive() {
+    const w = window.innerWidth;
+    this.perView = w < 600 ? 1 : w < 900 ? 2 : 3;
+    this.slideWidth = this.el.clientWidth / this.perView;
+
+    this.slides.forEach(slide => {
+      slide.style.width = this.slideWidth + 'px';
+    });
+  }
+
+cloneSlides() {
+    const clonesBefore = this.slides.slice(-this.perView).map(n => n.cloneNode(true));
+    const clonesAfter = this.slides.slice(0, this.perView).map(n => n.cloneNode(true));
+
+    clonesBefore.forEach(n => this.track.insertBefore(n, this.track.firstChild));
+    clonesAfter.forEach(n => this.track.appendChild(n));
+
+    this.slides = Array.from(this.track.children);
+    this.index = this.perView;
+  }
+
+  goTo(i, animate = true) {
+    if (animate) {
+      this.track.style.transition = 'transform 0.5s ease';
+    } else {
+      this.track.style.transition = 'none';
+    }
+
+    this.track.style.transform = `translateX(-${i * this.slideWidth}px)`;
+    this.index = i;
+    this.updatePagination();
+    this.lazyLoad();
+  }
+
+  next() { this.goTo(this.index + 1); }
+  prev() { this.goTo(this.index - 1); }
+
+  createPagination() {
+    this.dots = [];
+
+    for (let i = 0; i < this.slides.length - 2 * this.perView; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      dot.onclick = () => this.goTo(i + this.perView);
+      this.pagination.appendChild(dot);
+      this.dots.push(dot);
+    }
+  }
+
+  updatePagination() {
+    const realIndex = (this.index - this.perView + this.dots.length) % this.dots.length;
+    this.dots.forEach(d => d.classList.remove('active'));
+    if (this.dots[realIndex]) this.dots[realIndex].classList.add('active');
+  }
+
+  lazyLoad() {
+    this.slides.forEach(slide => {
+      const img = slide.querySelector('img');
+      if (img && !img.src) {
+        img.src = img.dataset.src;
+      }
+    });
+  }
+
+  bindEvents() {
+    window.addEventListener('resize', () => this.setupResponsive());
+
+    this.track.addEventListener('transitionend', () => {
+      if (this.index <= this.perView - 1) {
+        this.goTo(this.slides.length - 2 * this.perView, false);
+      }
+      if (this.index >= this.slides.length - this.perView) {
+        this.goTo(this.perView, false);
+      }
+    });
+
+    this.nextBtn.onclick = () => this.next();
+    this.prevBtn.onclick = () => this.prev();
+
+    // Touch + inertia
+    this.el.addEventListener('mousedown', e => this.start(e));
+    this.el.addEventListener('touchstart', e => this.start(e));
+
+    window.addEventListener('mousemove', e => this.move(e));
+    window.addEventListener('touchmove', e => this.move(e), { passive: false });
+
+    window.addEventListener('mouseup', e => this.end(e));
+    window.addEventListener('touchend', e => this.end(e));
+
+    this.el.addEventListener('mouseenter', () => this.stopAuto());
+    this.el.addEventListener('mouseleave', () => this.startAuto());
+  }
+ start(e) {
+    this.stopAuto();
+    this.dragging = true;
+
+    this.startX = e.touches ? e.touches[0].clientX : e.clientX;
+    this.lastX = this.startX;
+    this.lastTime = Date.now();
+
+    this.track.style.transition = 'none';
+  }
+
+  move(e) {
+    if (!this.dragging) return;
+    if (e.cancelable) e.preventDefault();
+
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    const dx = x - this.startX;
+
+    const now = Date.now();
+    this.velocity = (x - this.lastX) / (now - this.lastTime);
+
+    this.lastX = x;
+    this.lastTime = now;
+
+    this.track.style.transform =
+      `translateX(-${this.index * this.slideWidth - dx}px)`;
+  }
+ end() {
+    if (!this.dragging) return;
+    this.dragging = false;
+
+    // inertia
+    const momentum = this.velocity * 200;
+
+    if (momentum > 50) this.prev();
+    else if (momentum < -50) this.next();
+    else this.goTo(this.index);
+
+    this.startAuto();
+  }
+
+  startAuto() {
+    this.stopAuto();
+    this.timer = setInterval(() => this.next(), this.autoDelay);
+  }
+
+  stopAuto() {
+    clearInterval(this.timer);
+  }
+}
+// INIT
+new AdvancedSwiper(document.getElementById('swiper'), {
+  autoDelay: 5000
+});
+

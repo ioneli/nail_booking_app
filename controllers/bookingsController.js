@@ -10,7 +10,7 @@ const client = new Twilio(
 const otpStore = {};
 
 // -----------------------------
-// 📅 GET CALENDAR
+//  GET CALENDAR
 exports.getCalendar = async (req, res) => {
   try {
     const bookings = await Booking.find();
@@ -37,7 +37,7 @@ exports.getCalendar = async (req, res) => {
 };
 
 // -----------------------------
-// 📩 INIT BOOKING (SEND OTP)
+// INIT BOOKING (SEND OTP)
 exports.initBooking = async (req, res) => {
   let { phone, name, date, time, service } = req.body;
 
@@ -47,14 +47,14 @@ exports.initBooking = async (req, res) => {
     return res.status(400).json({ message: "Date incomplete" });
   }
 
-  // 🔥 FIX PHONE FORMAT (Romania)
+  //  FIX PHONE FORMAT (Romania)
   if (!phone.startsWith("+")) {
     phone = "+40" + phone.replace(/^0/, "");
   }
 
   console.log("PHONE FINAL:", phone);
 
-  // ❌ prevent double booking same slot
+  //  prevent double booking same slot
   const exists = await Booking.findOne({ date, time });
   if (exists) {
     return res.status(400).json({ message: "Slot deja ocupat!" });
@@ -82,7 +82,7 @@ exports.initBooking = async (req, res) => {
 };
 
 // -----------------------------
-// ✅ CONFIRM BOOKING
+//  CONFIRM BOOKING
 exports.confirmBooking = async (req, res) => {
   let { phone, otp } = req.body;
 
@@ -100,7 +100,7 @@ exports.confirmBooking = async (req, res) => {
   try {
     const { date, time, name, service } = stored.data;
 
-    // ❌ prevent duplicate again (safety)
+    //  prevent duplicate again (safety)
     const exists = await Booking.findOne({ date, time });
     if (exists) {
       return res.status(400).json({ message: "Slot deja ocupat!" });
@@ -125,7 +125,7 @@ exports.confirmBooking = async (req, res) => {
 };
 
 // -----------------------------
-// 📋 GET ALL BOOKINGS (ADMIN)
+//  GET ALL BOOKINGS (ADMIN)
 exports.getBookings = async (req, res) => {
   try {
     const bookings = await Booking.find().sort({ date: 1, time: 1 });
@@ -136,11 +136,12 @@ exports.getBookings = async (req, res) => {
 };
 
 // -----------------------------
-// ➕ ADD BOOKING (ADMIN - NO OTP)
+//  ADD BOOKING (ADMIN - NO OTP)
 exports.addBooking = async (req, res) => {
   try {
     const { date, time, name, phone, service } = req.body;
 
+    // Prevent double booking
     const exists = await Booking.findOne({ date, time });
     if (exists) {
       return res.status(400).json({ message: "Slot deja ocupat!" });
@@ -154,16 +155,19 @@ exports.addBooking = async (req, res) => {
       service
     });
 
-    res.json(booking);
+    // Return proper message + booking
+    res.status(201).json({
+      message: "Programare creată cu succes!",
+      booking
+    });
 
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Eroare creare booking" });
   }
 };
-
 // -----------------------------
-// ❌ DELETE BOOKING (ADMIN)
+//  DELETE BOOKING (ADMIN)
 exports.deleteBooking = async (req, res) => {
   try {
     await Booking.findByIdAndDelete(req.params.id);

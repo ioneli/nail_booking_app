@@ -10,7 +10,7 @@ const client = new Twilio(
 
 const otpStore = {}; // { phone: otp }
 
-// 📅 Calendar
+// Calendar
 router.get("/calendar", async (req, res) => {
   try {
     const bookings = await Booking.find({});
@@ -30,7 +30,7 @@ router.get("/calendar", async (req, res) => {
   }
 });
 
-// 📲 INIT OTP
+//  INIT OTP
 router.post("/init", async (req, res) => {
   const { phone, name, date, time } = req.body;
 
@@ -55,7 +55,7 @@ router.post("/init", async (req, res) => {
   }
 });
 
-// ✅ CONFIRM
+//  CONFIRM
 router.post("/confirm", async (req, res) => {
   const { phone, otp, date, time, name, service } = req.body;
 
@@ -73,19 +73,32 @@ router.post("/confirm", async (req, res) => {
   }
 });
 
-// 👑 ADMIN: GET ALL SORTED
+// GET bookings for a specific date
+router.get("/by-date/:date", async (req, res) => {
+  try {
+    const bookings = await Booking.find({ date: req.params.date });
+    res.json(bookings); // returnează array-ul de bookings
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Eroare la preluarea programărilor" });
+  }
+});
+
+//  ADMIN: GET ALL SORTED
 router.get("/", async (req, res) => {
   const bookings = await Booking.find({}).sort({ date: 1, time: 1 });
   res.json(bookings);
 });
 
-// 👑 ADMIN: ADD
+
+
+//  ADMIN: ADD
 router.post("/", async (req, res) => {
   const booking = await Booking.create(req.body);
   res.json(booking);
 });
 
-// 👑 ADMIN: DELETE
+//  ADMIN: DELETE
 router.delete("/:id", async (req, res) => {
   await Booking.findByIdAndDelete(req.params.id);
   res.json({ message: "Deleted" });

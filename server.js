@@ -8,34 +8,34 @@ const passport = require("passport");
 
 const app = express();
 
-// 🔹 Debug ENV
+//  Debug ENV
 console.log("MONGO:", process.env.MONGO_URI);
 
-// 🔹 Middleware
+//  Middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// 🔹 Session
+//  Session
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }));
 
-// 🔹 Passport
+//  Passport
 require("./config/passport")(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
-// 🔹 MongoDB
+//  MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.error("Mongo error:", err));
 
-// 🔹 Routes
+//  Routes
 app.use("/api/bookings", require("./routes/bookings"));
 
-// 🔹 Google Auth
+//  Google Auth
 app.get("/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
@@ -61,6 +61,6 @@ app.get("/auth/logout", (req, res) => {
   });
 });
 
-// 🔹 Start
+//  Start
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("Server running on port", PORT));

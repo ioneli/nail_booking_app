@@ -17,9 +17,19 @@
   <h2>Adaugă programare nouă</h2>
   <form id="add-booking-form">
     <div class="form-row">
-      <label>Data: <input type="date" name="date" required></label>
-      <label>Ora: <input type="time" name="time" required></label>
+      <label>Data: <input type="date" name="date" required></label> 
+ <label><select id="time" name="time">
+  <option value="">Selectează ora</option>
+  <option value="08:00">08:00</option>
+  <option value="10:00">10:00</option>
+  <option value="13:00">13:00</option>
+  <option value="15:00">15:00</option>
+  <option value="17:00">17:00</option>
+  <option value="19:00">19:00</option>
+  <option value="21:00">21:00</option>
+</select></label>
     </div>
+
     <div class="form-row">
       <label>Nume: <input type="text" name="name" placeholder="Nume" required></label>
       <label>Telefon: <input type="text" name="phone" placeholder="Telefon" required></label>
@@ -27,7 +37,7 @@
     <div class="form-row">
       <label>Serviciu: <input type="text" name="service" placeholder="Serviciu opțional"></label>
     </div>
-    <button type="submit" class="btn">Adaugă programare</button>
+    <button type="submit" class="btn glitter-purple">Adaugă programare</button>
   </form>
 <button onclick="logout()">Logout</button>
 

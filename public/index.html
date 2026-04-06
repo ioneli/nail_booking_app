@@ -21,18 +21,16 @@
     </p>
 
     <div class="buttons-top">
-      <button class="btn" id="showCalendarBtn">Programează</button>
-      <button class="btn" id="viewCollectionsBtn">Vezi colecții & servicii</button>
+      <button class="btn glitter-purple" id="showCalendarBtn">Programează</button>
     </div>
-
-    <!-- Calendar --><!-- 📅 Calendar Container -->
+    <!-- Calendar --><!--  Calendar Container -->
 <div id="calendar-container" class="hidden">
 
   <!-- Header -->
-  <div class="calendar-top">
-    <button id="prevMonth">←</button>
+  <div class="calendar-top glitter-purple">
+    <button  id="prevMonth">‹</button>
     <h3 id="monthTitle"></h3>
-    <button id="nextMonth">→</button>
+    <button id="nextMonth">›</button>
   </div>
 
   <!-- Weekdays -->
@@ -63,8 +61,8 @@
         <input id="name" placeholder="Nume" autocomplete="name">
         <input id="phone" placeholder="Telefon" autocomplete="tel">
 
-        <label>
-          <input type="checkbox" id="showServices"> Vreau să selectez serviciul
+        <label>Stiu ce vreau!
+          <input type="checkbox" id="showServices"> 
         </label>
 
         <div id="services-select" class="hidden">
@@ -77,9 +75,30 @@
           <input id="otp" placeholder="Cod SMS" autocomplete="one-time-code">
           <button class="btn confirm" id="confirmBookingBtn">Confirmă</button>
         </div>
-
+        
       </div>
     </div>
+    
+    <!--colection/products-->
+      <button class="btn glitter-purple" id="viewCollectionsBtn">Colecții:</button>
+    <!--swiper-->
+    <div id="swiper_box">
+    <div class="swiper" id="swiper">
+  <div class="swiper-track">
+    <div class="slide"><img src="images/nailss/balerina.jpg" /></div>
+    <div class="slide"><img src="images/nailss/patrat.jpg" /></div>
+    <div class="slide"><img src="images/nailss/stiletto.jpg" /></div>
+    <div class="slide"><img src="images/nailss/oval.jpg" /></div>
+  </div>
+
+  <button class="nav prev">‹</button>
+  <button class="nav next">›</button>
+
+  <div class="pagination"></div>
+
+</div>
+</div>
+
   </div>
 </div>
 
@@ -87,3 +106,16 @@
 <script type="module" src="script.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
