@@ -4,14 +4,6 @@ let selectedDate = new Date();
 selectedDate.setDate(selectedDate.getDate() + 1); // calendar începe de mâine
 let calendarData = {};
 
-// Afișează / ascunde serviciile
-document.getElementById("showServices").addEventListener("change", (e) => {
-  const div = document.getElementById("services-select");
-  div.classList.toggle("hidden", !e.target.checked);
-
-  if (e.target.checked) renderServices();
-});
-
 // Servicii
 const servicesData = [
   { id: 0, name: "Curățare", img: "images/curatare.jpg" },
@@ -22,6 +14,14 @@ const servicesData = [
   { id: 5, name: "Oval", img: "images/oval.jpg" },
   { id: 6, name: "Stiletto", img: "images/stiletto.jpg" }
 ];
+
+// Afișează / ascunde serviciile
+document.getElementById("showServices").addEventListener("change", (e) => {
+  const div = document.getElementById("services-select");
+  div.classList.toggle("hidden", !e.target.checked);
+
+  if (e.target.checked) renderServices();
+});
 
 // Render servicii
 function renderServices() {

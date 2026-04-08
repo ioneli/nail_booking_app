@@ -82,6 +82,7 @@ document.getElementById("showCalendarBtn").onclick = async () => {
 document.getElementById("calendar-container").classList.remove("hidden");
 await loadCalendarData();
 };
+
 // --month navigation-------
 function goToNextMonth() {
   animateCalendar("next", () => {
@@ -104,6 +105,7 @@ function goToPrevMonth() {
     renderCalendar();
   });
 }
+
 document.getElementById("prevMonth").onclick = goToPrevMonth;
 document.getElementById("nextMonth").onclick = goToNextMonth;
 function renderCalendar() {
@@ -122,7 +124,47 @@ function renderCalendar() {
     "Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"
   ];
 
-  title.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+function generateMonths(currentMonth, currentYear, n) {
+
+  let CalendarHead = "";
+
+  for (let i = -n; i <= n; i++) {
+
+    // Date auto-fixes overflow (e.g., month 12 → Jan next year)
+    const date = new Date(currentYear, currentMonth + i);
+
+    const month = date.getMonth();
+    const year = date.getFullYear();
+
+    const className = (i === 0)
+      ? "strong_visible"
+      : "less_visible";
+
+    CalendarHead += `<p class="${className}" data-offset="${i}">${monthNames[month]} <br> ${year}</p>`;
+  }
+
+  return CalendarHead;
+}
+
+
+
+  title.innerHTML =` <div id="monthsH">${generateMonths(currentMonth, currentYear, 2)}</div>;`
+  document.getElementById("monthsH").addEventListener("click", (e) => {
+  const target = e.target;
+
+  if (!target.classList.contains("less_visible")) return;
+
+  const offset = Number(target.dataset.offset);
+
+  const steps = Math.abs(offset);
+  const action = offset > 0 ? goToNextMonth : goToPrevMonth;
+
+  for (let i = 0; i < steps; i++) {
+    action();
+  }
+});
+
 
   // empty cells
   for (let i = 0; i < startDay; i++) {
