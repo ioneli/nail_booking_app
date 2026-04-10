@@ -1,3 +1,4 @@
+
 const table = document.getElementById("bookings-table");
 const form = document.getElementById("add-booking-form");
 
@@ -47,6 +48,7 @@ async function loadBookings() {
       <td>${b.time}</td>
       <td>${b.name}</td>
       <td>${b.phone}</td>
+      <td>${b.email}</td>
       <td>${b.service || "-"}</td>
       <td><button onclick="del('${b._id}')">X</button></td>
     `;
@@ -80,7 +82,8 @@ form.onsubmit = async e => {
     time: form.time.value,
     name: form.name.value,
     phone: form.phone.value,
-    service: form.service.value
+    service: form.service.value,
+    email: form.email.value
   };
 
   const res = await fetch("/api/bookings", {

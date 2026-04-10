@@ -11,7 +11,21 @@
 
 <div id="loader" class="loader hidden"></div>
 <div class="container">
+<!-- programarile -->
+<button id="myBookingsBtn" class="glitter-purple">Vezi Programări</button>
 
+<div id="myBookingsModal" class="hidden">
+  <input type="email" id="myEmail" placeholder="Email">
+  <button id="sendOtpBtn">Trimite cod</button>
+
+  <div id="otpSection" class="hidden">
+    <input type="text" id="otpInput" placeholder="OTP">
+    <button id="verifyOtpBtn">Verifică</button>
+  </div>
+
+  <div id="bookingsList"></div>
+<button id="closeBtn">X</button>
+</div>
   <!-- Card profil + programare inițial -->
   <div class="card profil-card">
     <img src="images/manichiurista.jpg" class="profil-img" alt="Manichiurista">
@@ -60,7 +74,7 @@
 
         <input id="name" placeholder="Nume" autocomplete="name">
         <input id="phone" placeholder="Telefon" autocomplete="tel">
-
+        <input id="email" placeHolder="Email" autocomplete="email">
         <label>Stiu ce vreau!
           <input type="checkbox" id="showServices"> 
         </label>
@@ -72,7 +86,7 @@
         <button class="btn" id="initBookingBtn">Trimite cod</button>
 
         <div id="otp-section" class="hidden">
-          <input id="otp" placeholder="Cod SMS" autocomplete="one-time-code">
+          <input id="otp" placeholder="Cod Email (verifica si spam)" autocomplete="one-time-code">
           <button class="btn confirm" id="confirmBookingBtn">Confirmă</button>
         </div>
         
@@ -83,7 +97,7 @@
    
     <!--colection/products-->
       <button class="btn glitter-purple" id="viewCollectionsBtn">Colecții:</button>
-    
+       <div id="zaCollection"></div>
    <div class="swiper" id="swiper">
   <div class="swiper-track">
     <div class="slide"><img src="images/nailss/balerina.jpg" /></div>
@@ -107,16 +121,3 @@
 <script type="module" src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -6,13 +6,13 @@ let calendarData = {};
 
 // Servicii
 const servicesData = [
-  { id: 0, name: "Curățare", img: "images/curatare.jpg" },
-  { id: 1, name: "Balerina", img: "images/balerina.jpg" },
-  { id: 2, name: "Slim", img: "images/slim.jpg" },
-  { id: 3, name: "Pătrat", img: "images/patrat.jpg" },
-  { id: 4, name: "Pătrat ascuțit", img: "images/patrat-ascutit.jpg" },
-  { id: 5, name: "Oval", img: "images/oval.jpg" },
-  { id: 6, name: "Stiletto", img: "images/stiletto.jpg" }
+  { id: 0, name: "Curățare", img: "images//nailsscuratare.jpg" },
+  { id: 1, name: "Balerina", img: "images/nailss/balerina.jpg" },
+  { id: 2, name: "Slim", img: "images/nailss/slim.jpg" },
+  { id: 3, name: "Pătrat", img: "images/nailss/patrat.jpg" },
+  { id: 4, name: "Pătrat ascuțit", img: "images/nailss/patrat-ascutit.jpg" },
+  { id: 5, name: "Oval", img: "images/nailss/oval.jpg" },
+  { id: 6, name: "Stiletto", img: "images/nailss/stiletto.jpg" }
 ];
 
 // Afișează / ascunde serviciile

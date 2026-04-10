@@ -5,6 +5,7 @@ const bookingSchema = new mongoose.Schema({
   time: String,
   name: String,
   phone: String,
+ email: String,
   service: {
     type: String,
     default: null

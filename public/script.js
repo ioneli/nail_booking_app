@@ -6,6 +6,13 @@ let calendarData = {};
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
 
+//=======
+let currentEditingId = null;
+let editNewDate = null;
+let editNewTime = null;
+let editCalendarData = {};
+//========
+
 const servicesData = [
   { id: 0, name: "Semi", img: "images/nailss/semi.jpg" },
   { id: 1, name: "Balerina", img: "images/nailss/balerina.jpg" },
@@ -120,8 +127,8 @@ function renderCalendar() {
   const startDay = (firstDay.getDay() + 6) % 7; // Monday start
 
   const monthNames = [
-    "Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie",
-    "Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"
+    "Jan","Feb","Mar","Apr","May","Jun",
+    "Jul","Aug","Sep","Oct","Nov","Dec"
   ];
 
 
@@ -243,9 +250,9 @@ async function initBooking() {
   const name = document.getElementById("name").value;
   const phone = document.getElementById("phone").value;
   const time = document.getElementById("time").value;
-
-  if (!name || !phone || !time) {
-    alert("Completează toate câmpurile obligatorii!");
+const email = document.getElementById("email").value;
+  if (!name || !phone || !time ) {
+    showToast("Completează toate câmpurile obligatorii!");
     return;
 
   }
@@ -255,6 +262,7 @@ async function initBooking() {
     time,
     phone,
     name,
+    email,
     service: selectedService,
   };
 
@@ -270,7 +278,7 @@ async function initBooking() {
     toggleLoader(false);
 
     if (res.ok) {
-      showToast("Codul OTP a fost trimis pe telefonul tău!");
+      showToast(data.message);
       document.getElementById("otp-section").classList.remove("hidden");
       document.getElementById("services-select").classList.add("hidden");
       
@@ -305,8 +313,10 @@ async function confirmBooking() {
     const data = await res.json();
     toggleLoader(false);
     showToast(data.message);
-
+    
     if (res.ok) {
+        showToast(data.message);
+    
       location.reload(); // refresh calendar and slots
     }
   } catch (err) {
@@ -411,6 +421,156 @@ window.showToast = showToast = (message) => {
   setTimeout(() => toast.classList.remove("show"), 3000);
 };
 
+//===== user update
+//========================================
+//send
+async function sendOtp() {
+  const email = document.getElementById("myEmail").value;
+  if (!email || !email.includes("@")) {
+    showToast("Introdu un email valid!");
+    return;
+  }
+toggleLoader(true);
+  const res = await fetch("/api/bookings/my/init", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ email })
+  });
+
+  const data = await res.json();
+  showToast(data.message);
+
+  document.getElementById("otpSection").classList.remove("hidden");
+  toggleLoader(false);
+}
+//verify
+async function verifyOtp() {
+  const email = document.getElementById("myEmail").value;
+  const otp = document.getElementById("otpInput").value;
+
+  if (!otp) {
+    alert("Introdu OTP!");
+    return;
+  }
+
+  toggleLoader(true);
+
+  const res = await fetch("/api/bookings/my/verify", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ email, otp })
+  });
+
+  const data = await res.json();
+
+  toggleLoader(false);
+
+  
+
+  // 
+  if (!res.ok) {
+    alert(data.message);
+    return;
+  }
+
+  renderBookings(data); 
+}
+
+ //user delete
+async function deleteBooking(id) {
+  const email = document.getElementById("myEmail").value;
+
+  if (!confirm("Ești sigur?")) return;
+
+  const res = await fetch(`/api/bookings/my/${id}`, {
+    method: "DELETE",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ email })
+  });
+
+  const data = await res.json();
+  alert(data.message);
+
+  verifyOTP(); // reload
+}
+
+//render bookings
+function renderBookings(bookings) {
+  const list = document.getElementById("bookingsList");
+  list.innerHTML = "";
+
+  if (!bookings.length) {
+    list.innerHTML = "<p>Nu ai programări</p>";
+    return;
+  }
+
+  bookings.forEach(b => {
+    const label = document.createElement("label");
+    label.classList.add("glitter-purple")
+    label.innerHTML = ` aveti pe data de ${b.date}<br> la ora: ${b.time}
+      <button class="delBtn" data-id="${b._id}">Anuleza</button><br>
+      `;
+label.querySelector(".delBtn")
+  .addEventListener("click", () => deleteBooking(b._id));
+    list.appendChild(label);
+  });
+}
+
+//load from backend
+async function loadEditCalendar() {
+
+  const res = await fetch("/api/bookings/calendar");
+  editCalendarData = await res.json();
+
+  renderEditCalendar();
+}
+
+// ========== add event delete/update
+
+
+document.getElementById("bookingsList").addEventListener("click", async (e) => {
+
+  const id = e.target.dataset.id;
+  const email = document.getElementById("myEmail").value;
+
+  // DELETE
+  if (e.target.classList.contains("deleteBtn")) {
+    if (!confirm("Ești sigur?")) return;
+toggleLoader(true);
+    const res = await fetch(`/api/bookings/my/${id}`, {
+      method: "DELETE",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+    alert(data.message);
+toggleLoader(false);
+    verifyOtp(); // reload
+  }
+});
+function openMyBookings() {
+  document.getElementById("myBookingsModal").classList.remove("hidden");
+
+  // reset fields
+  document.getElementById("myEmail").value = "";
+  document.getElementById("otpInput").value = "";
+
+  // ascunde secțiuni
+  document.getElementById("otpSection").classList.add("hidden");
+  document.getElementById("bookingsList").innerHTML = "";
+}
+document.getElementById("myBookingsModal").addEventListener("click", (e) => {
+  if (e.target.id === "myBookingsModal") {
+    e.target.classList.add("hidden");
+  }
+});
+
+function closeBookings(){ document.getElementById("myBookingsModal").classList.add("hidden");};
+document.getElementById("closeBtn").addEventListener("click", closeBookings);
+document.getElementById("myBookingsBtn").addEventListener("click", openMyBookings);
+document.getElementById("sendOtpBtn").addEventListener("click", sendOtp);
+document.getElementById("verifyOtpBtn").addEventListener("click", verifyOtp);
 
 // Swiper
 
@@ -590,4 +750,3 @@ cloneSlides() {
 new AdvancedSwiper(document.getElementById('swiper'), {
   autoDelay: 5000
 });
-
