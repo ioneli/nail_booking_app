@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const session = require("express-session");
 const passport = require("passport");
-
+const MongoStore = require("connect-mongo").default;
 const app = express();
 
 //  Debug ENV
@@ -19,7 +19,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,}),
+      cookie: { secure: false }, // true if using HTTPS
 }));
 
 //  Passport
