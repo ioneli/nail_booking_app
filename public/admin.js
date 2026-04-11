@@ -44,11 +44,8 @@ async function loadBookings() {
   data.forEach(b=>{
     const tr=document.createElement("tr");
     tr.innerHTML=`
-      <td>${b.date}</td>
-      <td>${b.time}</td>
-      <td>${b.name}</td>
-      <td>${b.phone}</td>
-      <td>${b.email}</td>
+      <td>${b.date}<br>ora:${b.time}</td>
+      <td>${b.name}<br>${b.phone || "-"}<br>${b.email || "-"}</td>
       <td>${b.service || "-"}</td>
       <td><button onclick="del('${b._id}')">X</button></td>
     `;

@@ -10,11 +10,11 @@ body {
   background: linear-gradient(135deg, #ff7eb3, #ff758c);
   color: #333;
 }
-.bookingsList{
+#bookingsList{
 background:linear-gradient(135deg, #ffffff, #d5a6ac);
 margin: 5px;
 padding: 20px !important;
-
+font-size:20px;
 
 }
 #myBookingsBtn{
@@ -22,7 +22,7 @@ font-size:15px;
 font-weight:bold;
 }
 
-.bookingsList label{
+#bookingsList label{
 margin: 3px;
 padding:3px !important;
 text-align:center;
@@ -94,7 +94,7 @@ padding: 10px !important;
 }
 
 #viewCollectionsBtn{margin-top:50px;text-align:left; display:block; margin-left:5%;padding:2px;border-radius: 5px;}
-#prevMonth, #nextMonth{font-size:30px;margin:-20px;}
+#prevMonth, #nextMonth{font-size:30px;margin:-20px;margin-top:70px;}
 .confirm {
   background: linear-gradient(135deg, #4facfe, #00f2fe);
 }
@@ -118,7 +118,8 @@ padding: 10px !important;
   margin-top:25px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  max-width:340px
+  max-width:300px;
+  margin-left:10px;
  }
 .less_visible{
 margin-top:20px;
@@ -271,7 +272,7 @@ input, select {
 /*  TOAST */
 .toast {
   position: fixed;
-  bottom: 10px;
+  bottom: 1px;
   left: 50%;
   transform: translateX(-50%);
   background: #333;
@@ -284,7 +285,7 @@ input, select {
 
 .toast.show { 
 bottom: 100px;
- font-size:30px;
+ font-size:15px;
   opacity: 0.9;
 }
 

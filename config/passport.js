@@ -12,7 +12,7 @@ module.exports = (passport) => {
         const email = profile.emails[0].value;
         ;
 console.log("LOGIN EMAIL:", profile.emails[0].value);
-        if (email === "cointhreat@gmail.com") {
+        if (email === process.env.ADMIN_EMAIL) {
           return done(null, profile);
         } else {
           return done(null, false);

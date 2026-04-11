@@ -506,7 +506,7 @@ function renderBookings(bookings) {
 
   bookings.forEach(b => {
     const label = document.createElement("label");
-    label.classList.add("glitter-purple")
+    
     label.innerHTML = ` aveti pe data de ${b.date}<br> la ora: ${b.time}
       <button class="delBtn" data-id="${b._id}">Anuleza</button><br>
       `;
