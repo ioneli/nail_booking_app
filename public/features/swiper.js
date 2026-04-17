@@ -16,7 +16,6 @@ export default class AdvancedSwiper {
     this.lastX = 0;
     this.lastTime = 0;
     this.dragging = false;
-    this.isAnimating = false;
 
     this.init();
   }
@@ -55,7 +54,6 @@ export default class AdvancedSwiper {
   goTo(i, animate = true) {
     if (animate) {
       this.track.style.transition = 'transform 0.5s ease';
-      this.isAnimating = true;
     } else {
       this.track.style.transition = 'none';
     }
@@ -67,11 +65,11 @@ export default class AdvancedSwiper {
   }
 
   next() { 
-    if (!this.isAnimating) this.goTo(this.index + 1); 
+    this.goTo(this.index + 1); 
   }
 
   prev() { 
-    if (!this.isAnimating) this.goTo(this.index - 1); 
+    this.goTo(this.index - 1); 
   }
 
   createPagination() {
@@ -105,7 +103,6 @@ export default class AdvancedSwiper {
     window.addEventListener('resize', () => this.setupResponsive());
 
     this.track.addEventListener('transitionend', () => {
-      this.isAnimating = false;
       if (this.index <= this.perView - 1) {
         this.goTo(this.slides.length - 2 * this.perView, false);
       }
