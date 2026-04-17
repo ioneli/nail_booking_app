@@ -1,24 +1,29 @@
-// utils/sendEmail.js
+const { Resend } = require("resend");
 
-const nodemailer = require("nodemailer");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-// configurare transport email (Gmail)
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER, // email tău
-    pass: process.env.EMAIL_PASS  // app password
-  }
-});
-
-// funcție pentru trimitere OTP
-async function sendOTP(email, otp) {
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "Cod verificare programare",
-    text: `Codul tău OTP este: ${otp}`
-  });
+// Generate OTP
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-module.exports = sendOTP;
+// Send OTP email
+async function sendOTP(email, otp) {
+ const response =  await resend.emails.send({
+    from: process.env.EMAIL_FROM,
+    to: email,
+    subject: "Your OTP Code",
+    html: `
+      <div style="font-family: Arial; padding: 10px;">
+        <h2>Your OTP Code</h2>
+        <p style="font-size: 20px;">
+          <b>${otp}</b>
+        </p>
+        <p>This code expires in 5 minutes.</p>
+      </div>
+    `
+  });
+console.log("Resend response:", response);
+}
+
+module.exports = { generateOTP, sendOTP };

@@ -1,16 +1,5 @@
 const Booking = require("../models/Booking");
-
-//Node Mailer
-
-const nodemailer = require("nodemailer");
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+const { sendOTP} = require("../utils/sendEmail");
 
 // ====anti spam
 //==============
@@ -68,14 +57,18 @@ exports.initMyBookings = async (req, res) => {
     expiresAt: Date.now() + 5 * 60 * 1000 // 5 min
   };
 
-  await transporter.sendMail({
-    to: email,
-    subject: "OTP programări",
-    text: `Codul tău: ${otp}`
-  });
+try {
+  await sendOTP(email, otp); 
 
-  res.json({ message: "OTP trimis" });
+  res.json({ message: "Cod OTP trimis pe email!" });
+
+} catch (err) {
+  console.error(err);
+  res.status(500).json({ message: "Eroare trimitere email" });
+}
+
 };
+
 //=== verify otp
 exports.verifyMyBookings = async (req, res) => {
   const { email, otp } = req.body;
@@ -258,30 +251,23 @@ if (weeklyCount >= 2) {
     message: "Ai atins limita de 2 programări pe săptămână!"
   });
 }
-  const otp = Math.floor(100000 + Math.random() * 900000);
+const otp = Math.floor(100000 + Math.random() * 900000);
 
-  // IMPORTANT: salvăm pe EMAIL acum, nu pe telefon
-  otpStore[email] = {
-    otp,
-    data: { date, time, name, phone, service, email }
-  };
-
-  try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Cod OTP programare",
-      text: `Codul tău OTP este: ${otp}`
-    });
-
-    res.json({ message: "Cod OTP trimis pe email!" });
-
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Eroare trimitere email" });
-  }
+otpStore[email] = {
+  otp,
+  data: { date, time, name, phone, service, email }
 };
 
+try {
+  await sendOTP(email, otp); 
+
+  res.json({ message: "Cod OTP trimis pe email!" });
+
+} catch (err) {
+  console.error(err);
+  res.status(500).json({ message: "Eroare trimitere email" });
+}
+}
 // -----------------------------
 //  CONFIRM BOOKING
 exports.confirmBooking = async (req, res) => {

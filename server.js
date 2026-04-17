@@ -1,5 +1,5 @@
 require("dotenv").config();
-
+const { extractCategory } = require("./public/features/sort");
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -7,9 +7,10 @@ const session = require("express-session");
 const passport = require("passport");
 const MongoStore = require("connect-mongo").default;
 const app = express();
+const fs = require("fs");
 
 //  Debug ENV
-console.log("MONGO:", process.env.MONGO_URI);
+console.log("MONGO:Hidden");
 
 //  Middleware
 app.use(express.json());
@@ -63,7 +64,46 @@ app.get("/auth/logout", (req, res) => {
     res.redirect("/");
   });
 });
+//colectii
 
+// serve images
+app.use(
+  "/images",
+  express.static(path.join(__dirname, "public/images/nailss"))
+);
+
+// API imagini grupate pe categorii
+app.get("/api/gallery", (req, res) => {
+  const dir = path.join(__dirname, "public/images/nailss");
+
+  const files = fs.readdirSync(dir);
+
+  const grouped = {};
+
+  files.forEach(file => {
+    const category = extractCategory(file);
+    const url = "/images/" + file;
+
+    if (!grouped[category]) {
+      grouped[category] = [];
+    }
+
+    grouped[category].push(url);
+  });
+
+  // transformăm în "albums"
+  const albums = Object.entries(grouped).map(([category, images]) => {
+    const randomCover = images[Math.floor(Math.random() * images.length)];
+
+    return {
+      category,
+      cover: randomCover,
+      images
+    };
+  });
+
+  res.json(albums);
+});
 //  Start
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("Server running on port", PORT));

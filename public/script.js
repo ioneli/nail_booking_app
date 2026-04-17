@@ -1,16 +1,19 @@
+
+import AdvancedSwiper from "/features/swiper.js";
+import {renderCalendar,  generateTimeSlots, loadCalendarData} from "/features/calendar.js"
+import {collectionsReady} from "/features/collection.js"
+import {toggleLoader , showToast} from "./features/utils.js"
 // script.js (module)
-let selectedDate = null;
-let selectedService = null;
 let bookingData = {};
 let calendarData = {};
-let currentMonth = new Date().getMonth();
-let currentYear = new Date().getFullYear();
 
 //=======
 let currentEditingId = null;
 let editNewDate = null;
 let editNewTime = null;
 let editCalendarData = {};
+let selectedDate = null;
+let selectedService = null;
 //========
 
 const servicesData = [
@@ -32,10 +35,10 @@ const servicesCheckbox = document.getElementById("showServices");
 const servicesContainer = document.getElementById("services-select");
 const initBookingBtn = document.getElementById("initBookingBtn");
 const confirmBookingBtn = document.getElementById("confirmBookingBtn");
-const prevMonthBtn = document.getElementById("prevMonthBtn");
-const nextMonthBtn = document.getElementById("nextMonthBtn");
+
 const zaswiper = document.getElementById("swiper_box");
 // ------Event listener-----------------
+
 
 servicesCheckbox.addEventListener("change", e => {
   servicesContainer.classList.toggle("hidden", !e.target.checked); 
@@ -46,13 +49,13 @@ initBookingBtn.addEventListener("click", initBooking);
 confirmBookingBtn.addEventListener("click", confirmBooking);
 
 modal.addEventListener("click", e => {
-  if (e.target.id === "modal"){ modal.classList.remove("active");
-      zaswiper.classList.toggle("hidden");}        
+  if (e.target.id === "modal"){ modal.classList.remove("active");}        
  
 });
 
 // ---------------------------
 // Render services
+ 
 function renderServices() {
   const container = document.getElementById("services");
   container.innerHTML = "";
@@ -70,180 +73,16 @@ function renderServices() {
 }
 
 // ---------------------------
-// Calendar
-async function loadCalendarData(year, month) {
-  toggleLoader(true);
-  try {
-    const res = await fetch("/api/bookings/calendar");
-    calendarData = await res.json();
-  renderCalendar();
-  } catch (err) {
-    console.error(err);
-  } finally {
-    toggleLoader(false);
-  }
-}
 
+loadCalendarData()
 // Event listeners
 document.getElementById("showCalendarBtn").onclick = async () => {
 document.getElementById("calendar-container").classList.remove("hidden");
+document.getElementById("colection").classList.add("hidden");
+document.getElementById("showCalendarBtn").classList.add("hidden");
 await loadCalendarData();
 };
 
-// --month navigation-------
-function goToNextMonth() {
-  animateCalendar("next", () => {
-    currentMonth++;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
-    renderCalendar();
-  });
-}
-
-function goToPrevMonth() {
-  animateCalendar("prev", () => {
-    currentMonth--;
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
-    }
-    renderCalendar();
-  });
-}
-
-document.getElementById("prevMonth").onclick = goToPrevMonth;
-document.getElementById("nextMonth").onclick = goToNextMonth;
-function renderCalendar() {
-  const calendar = document.getElementById("calendar");
-  const title = document.getElementById("monthTitle");
-
-  calendar.innerHTML = "";
-
-  const firstDay = new Date(currentYear, currentMonth, 1);
-  const lastDay = new Date(currentYear, currentMonth + 1, 0);
-
-  const startDay = (firstDay.getDay() + 6) % 7; // Monday start
-
-  const monthNames = [
-    "Jan","Feb","Mar","Apr","May","Jun",
-    "Jul","Aug","Sep","Oct","Nov","Dec"
-  ];
-
-
-function generateMonths(currentMonth, currentYear, n) {
-
-  let CalendarHead = "";
-
-  for (let i = -n; i <= n; i++) {
-
-    // Date auto-fixes overflow (e.g., month 12 → Jan next year)
-    const date = new Date(currentYear, currentMonth + i);
-
-    const month = date.getMonth();
-    const year = date.getFullYear();
-
-    const className = (i === 0)
-      ? "strong_visible"
-      : "less_visible";
-
-    CalendarHead += `<p class="${className}" data-offset="${i}">${monthNames[month]} <br> ${year}</p>`;
-  }
-
-  return CalendarHead;
-}
-
-
-
-  title.innerHTML =` <div id="monthsH">${generateMonths(currentMonth, currentYear, 2)}</div>;`
-  document.getElementById("monthsH").addEventListener("click", (e) => {
-  const target = e.target;
-
-  if (!target.classList.contains("less_visible")) return;
-
-  const offset = Number(target.dataset.offset);
-
-  const steps = Math.abs(offset);
-  const action = offset > 0 ? goToNextMonth : goToPrevMonth;
-
-  for (let i = 0; i < steps; i++) {
-    action();
-  }
-});
-
-
-  // empty cells
-  for (let i = 0; i < startDay; i++) {
-    const empty = document.createElement("div");
-    empty.className = "day empty";
-    calendar.appendChild(empty);
-  }
-
-  for (let d = 1; d <= lastDay.getDate(); d++) {
-    const dateObj = new Date(currentYear, currentMonth, d);
-    const date = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-
-    const dayInfo = calendarData[date];
-    const freeSlots = dayInfo ? 4 - dayInfo.booked : 4;
-    const isSunday = dateObj.getDay() === 0;
-    const today = new Date(); 
-    today.setHours(0,0,0,0);
-
-    const isPastOrToday = dateObj <= today; 
-    const div = document.createElement("div");
-    div.className = "day";
-
-    // color logic
-    if (isSunday || isPastOrToday || freeSlots <= 0) div.classList.add("gray");
-    else if (freeSlots ===1) div.classList.add("red");
-    else if (freeSlots <= 2) div.classList.add("orange");
-    else div.classList.add("green");
-
-    // today highlight
-   
-    if (
-      d === today.getDate() &&
-      currentMonth === today.getMonth() &&
-      currentYear === today.getFullYear()
-    ) {
-      div.classList.add("today");
-    }
-
-    div.innerHTML = `
-      <strong>${d}</strong>
-      <small>${freeSlots <= 0 ? "închis" :isPastOrToday ? "închis" : isSunday ? "închis" : freeSlots === 1 ? freeSlots + " loc": freeSlots + " locuri"}</small>
-    `;
-
-    if (!isSunday && freeSlots > 0 && !isPastOrToday) {
-      div.onclick = () => {
-        selectedDate = date;
-        const occupied = dayInfo ? dayInfo.occupiedHours : [];
-        generateTimeSlots(occupied);
-
-        document.getElementById("modal").classList.add("active");
-        zaswiper.classList.toggle("hidden");        
-
-        document.getElementById("selected-date").textContent = date;
-      };
-    }
-
-    calendar.appendChild(div);
-  }
-}
-
-// Time slots
-function generateTimeSlots(occupied = []) {
-  const select = document.getElementById("time");
-  select.innerHTML = '<option value="">Selectează ora</option>';
-  ["10:00","13:00","15:00","18:00"].forEach(slot => {
-    const option = document.createElement("option");
-    option.value = slot;
-    option.textContent = occupied.includes(slot) ? `${slot} (ocupat)` : slot;
-    if (occupied.includes(slot)) option.disabled = true;
-    select.appendChild(option);
-  });
-}
 
 //  Init booking
 async function initBooking() {
@@ -258,11 +97,11 @@ const email = document.getElementById("email").value;
   }
 
   bookingData = {
-    date: selectedDate,
+    date: document.getElementById("selected-date").textContent,
     time,
-    phone,
-    name,
     email,
+    name,
+    phone,
     service: selectedService,
   };
 
@@ -272,7 +111,9 @@ const email = document.getElementById("email").value;
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(bookingData)
-    });
+   
+   });
+   console.log(bookingData);
 
     const data = await res.json();
     toggleLoader(false);
@@ -313,7 +154,6 @@ async function confirmBooking() {
     const data = await res.json();
     toggleLoader(false);
     showToast(data.message);
-    
     if (res.ok) {
         showToast(data.message);
     
@@ -325,101 +165,6 @@ async function confirmBooking() {
     showToast("Eroare la confirmarea booking-ului");
   }
 }
-
-// Utils
-function toggleLoader(show) {
-  const loader = document.getElementById("loader");
-  if (loader) loader.classList.toggle("hidden", !show);
-}
-
-function showToast(message) {
-  const toast = document.getElementById("toast");
-  if (!toast) return;
-  toast.textContent = message;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 3000);
-}
-let touchStartX = 0;
-let touchEndX = 0;
-
-const calendarContainer = document.getElementById("calendar");
-
-// Start touch
-calendarContainer.addEventListener("touchstart", (e) => {
-  touchStartX = e.changedTouches[0].screenX;
-});
-
-// End touch
-calendarContainer.addEventListener("touchend", (e) => {
-  touchEndX = e.changedTouches[0].screenX;
-  handleSwipe();
-});
-
-function handleSwipe() {
-  const diff = touchStartX - touchEndX;
-
-  // sensitivity (adjust if needed)
-  const threshold = 50;
-
-  if (Math.abs(diff) < threshold) return;
-
-  if (diff > 0) {
-    //  swipe left → next month
-    goToNextMonth();
-  } else {
-    //  swipe right → previous month
-    goToPrevMonth();
-  }
-}
-// animatin calendar
-function animateCalendar(direction, callback) {
-  const calendar = document.getElementById("calendar");
-
-  // remove orice animație veche
-  calendar.classList.remove(
-    "slide-left",
-    "slide-right",
-    "slide-in-left",
-    "slide-in-right"
-  );
-
-  // EXIT (iese din ecran)
-  calendar.classList.add(
-    direction === "next" ? "slide-right" : "slide-left"
-  );
-
-  setTimeout(() => {
-    callback(); // schimbă luna
-
-    
-    // ENTER (intră din partea opusă)
-    calendar.classList.add(
-      direction === "next" ? "slide-in-right" : "slide-in-left"
-    );
-    // reset poziție
-    calendar.classList.remove("slide-left", "slide-right");
-
-    setTimeout(() => {
-    calendar.offsetHeight;
-    calendar.classList.add("reset_position");
-    // curățare după animație
-    setTimeout(() => {
-    
-    calendar.classList.remove("slide-in-left", "slide-in-right", "reset_position");
-    }, 300);
-    }, 300);
-  }, 300);
-}
-window.toggleLoader = toggleLoader = (show) => {
-  document.getElementById("loader").classList.toggle("hidden", !show);
-};
-
-window.showToast = showToast = (message) => {
-  const toast = document.getElementById("toast");
-  toast.textContent = message;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 3000);
-};
 
 //===== user update
 //========================================
@@ -449,7 +194,7 @@ async function verifyOtp() {
   const otp = document.getElementById("otpInput").value;
 
   if (!otp) {
-    alert("Introdu OTP!");
+    showToast("Introdu OTP!");
     return;
   }
 
@@ -490,7 +235,7 @@ async function deleteBooking(id) {
 
   const data = await res.json();
   alert(data.message);
-
+ renderBookings(data); 
   verifyOTP(); // reload
 }
 
@@ -572,181 +317,18 @@ document.getElementById("myBookingsBtn").addEventListener("click", openMyBooking
 document.getElementById("sendOtpBtn").addEventListener("click", sendOtp);
 document.getElementById("verifyOtpBtn").addEventListener("click", verifyOtp);
 
-// Swiper
 
-class AdvancedSwiper {
-  constructor(el, options = {}) {
-    this.el = el;
-    this.track = el.querySelector('.swiper-track');
-    this.slides = Array.from(this.track.children);
+//events
 
-    this.pagination = el.querySelector('.pagination');
-    this.prevBtn = el.querySelector('.prev');
-    this.nextBtn = el.querySelector('.next');
-
-    this.index = 0;
-    this.autoDelay = options.autoDelay || 60000;
-
-    this.velocity = 0;
-    this.lastX = 0;
-    this.lastTime = 0;
-
-    this.init();
-  }
-
-  init() {
-    this.setupResponsive();
-    this.cloneSlides();
-    this.createPagination();
-    this.bindEvents();
-    this.lazyLoad();
-    this.startAuto();
-    this.goTo(this.index, false);
-  }
-
-  setupResponsive() {
-    const w = window.innerWidth;
-    this.perView = w < 600 ? 1 : w < 900 ? 2 : 3;
-    this.slideWidth = this.el.clientWidth / this.perView;
-
-    this.slides.forEach(slide => {
-      slide.style.width = this.slideWidth + 'px';
-    });
-  }
-
-cloneSlides() {
-    const clonesBefore = this.slides.slice(-this.perView).map(n => n.cloneNode(true));
-    const clonesAfter = this.slides.slice(0, this.perView).map(n => n.cloneNode(true));
-
-    clonesBefore.forEach(n => this.track.insertBefore(n, this.track.firstChild));
-    clonesAfter.forEach(n => this.track.appendChild(n));
-
-    this.slides = Array.from(this.track.children);
-    this.index = this.perView;
-  }
-
-  goTo(i, animate = true) {
-    if (animate) {
-      this.track.style.transition = 'transform 0.5s ease';
-    } else {
-      this.track.style.transition = 'none';
-    }
-
-    this.track.style.transform = `translateX(-${i * this.slideWidth}px)`;
-    this.index = i;
-    this.updatePagination();
-    this.lazyLoad();
-  }
-
-  next() { this.goTo(this.index + 1); }
-  prev() { this.goTo(this.index - 1); }
-
-  createPagination() {
-    this.dots = [];
-
-    for (let i = 0; i < this.slides.length - 2 * this.perView; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'dot';
-      dot.onclick = () => this.goTo(i + this.perView);
-      this.pagination.appendChild(dot);
-      this.dots.push(dot);
-    }
-  }
-
-  updatePagination() {
-    const realIndex = (this.index - this.perView + this.dots.length) % this.dots.length;
-    this.dots.forEach(d => d.classList.remove('active'));
-    if (this.dots[realIndex]) this.dots[realIndex].classList.add('active');
-  }
-
-  lazyLoad() {
-    this.slides.forEach(slide => {
-      const img = slide.querySelector('img');
-      if (img && !img.src) {
-        img.src = img.dataset.src;
-      }
-    });
-  }
-
-  bindEvents() {
-    window.addEventListener('resize', () => this.setupResponsive());
-
-    this.track.addEventListener('transitionend', () => {
-      if (this.index <= this.perView - 1) {
-        this.goTo(this.slides.length - 2 * this.perView, false);
-      }
-      if (this.index >= this.slides.length - this.perView) {
-        this.goTo(this.perView, false);
-      }
-    });
-
-    this.nextBtn.onclick = () => this.next();
-    this.prevBtn.onclick = () => this.prev();
-
-    // Touch + inertia
-    this.el.addEventListener('mousedown', e => this.start(e));
-    this.el.addEventListener('touchstart', e => this.start(e));
-
-    window.addEventListener('mousemove', e => this.move(e));
-    window.addEventListener('touchmove', e => this.move(e), { passive: false });
-
-    window.addEventListener('mouseup', e => this.end(e));
-    window.addEventListener('touchend', e => this.end(e));
-
-    this.el.addEventListener('mouseenter', () => this.stopAuto());
-    this.el.addEventListener('mouseleave', () => this.startAuto());
-  }
- start(e) {
-    this.stopAuto();
-    this.dragging = true;
-
-    this.startX = e.touches ? e.touches[0].clientX : e.clientX;
-    this.lastX = this.startX;
-    this.lastTime = Date.now();
-
-    this.track.style.transition = 'none';
-  }
-
-  move(e) {
-    if (!this.dragging) return;
-    if (e.cancelable) e.preventDefault();
-
-    const x = e.touches ? e.touches[0].clientX : e.clientX;
-    const dx = x - this.startX;
-
-    const now = Date.now();
-    this.velocity = (x - this.lastX) / (now - this.lastTime);
-
-    this.lastX = x;
-    this.lastTime = now;
-
-    this.track.style.transform =
-      `translateX(-${this.index * this.slideWidth - dx}px)`;
-  }
- end() {
-    if (!this.dragging) return;
-    this.dragging = false;
-
-    // inertia
-    const momentum = this.velocity * 200;
-
-    if (momentum > 50) this.prev();
-    else if (momentum < -50) this.next();
-    else this.goTo(this.index);
-
-    this.startAuto();
-  }
-
-  startAuto() {
-    this.stopAuto();
-    this.timer = setInterval(() => this.next(), this.autoDelay);
-  }
-
-  stopAuto() {
-    clearInterval(this.timer);
-  }
-}
-// INIT
-new AdvancedSwiper(document.getElementById('swiper'), {
-  autoDelay: 5000
+document.getElementById("viewCollectionsBtn").addEventListener("click", function(){
+document.getElementById("colection").classList.remove("hidden");
+document.getElementById("calendar-container").classList.add("hidden");
+document.getElementById("showCalendarBtn").classList.remove("hidden");
 });
+//render colections
+(async () => {
+  await collectionsReady();
+    new AdvancedSwiper(document.getElementById('swiper'), {
+    autoDelay: 5000
+  });
+})();
