@@ -55,6 +55,7 @@ export default class AdvancedSwiper {
   goTo(i, animate = true) {
     if (animate) {
       this.track.style.transition = 'transform 0.5s ease';
+      this.isAnimating = true;
     } else {
       this.track.style.transition = 'none';
     }
@@ -131,8 +132,6 @@ export default class AdvancedSwiper {
   }
 
   start(e) {
-    if (this.isAnimating) return; // Prevent interaction during animation
-    
     this.stopAuto();
     this.dragging = true;
     this.velocity = 0; // Reset velocity on new touch
@@ -164,7 +163,6 @@ export default class AdvancedSwiper {
   end(e) {
     if (!this.dragging) return;
     this.dragging = false;
-    this.isAnimating = true;
 
     // Only apply momentum if swipe distance is significant
     const totalDx = this.lastX - this.startX;
