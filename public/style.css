@@ -8,7 +8,7 @@
 /*colection*/
 .X{background:red;opacity:0.6;position:absolute;z-index:998;top:3%;right:3%;border-radius:50%;width:50px;font-weight:bold;height:50px;}
 .example img{margin:2px;width:120px;height:120px;}
-.fullScreen img{max-width:350px;height:auto;display:block;margin:auto;}
+.fullScreen img{max-width:300px;height:auto;display:block;margin:auto;}
 .fullScreen{
 background:black;
 opacity:0.98;
@@ -23,7 +23,7 @@ object-fit:cover;
 z-index: 998;
 display:block;
 }
-.nav-btn{height:100px;z-index:999;bottom:40%;position:fixed;font-weight:bold;font-size:50px;}
+.nav-btn{height:100px;z-index:999;bottom:60%;position:fixed;font-weight:bold;font-size:50px;}
 .next-btn{right:3%;}
 .prev-btn{left:3%;}
 .example{cursor:pointer;}
