@@ -15,6 +15,8 @@ export default class AdvancedSwiper {
     this.velocity = 0;
     this.lastX = 0;
     this.lastTime = 0;
+    this.dragging = false;
+    this.isAnimating = false;
 
     this.init();
   }
@@ -39,7 +41,7 @@ export default class AdvancedSwiper {
     });
   }
 
-cloneSlides() {
+  cloneSlides() {
     const clonesBefore = this.slides.slice(-this.perView).map(n => n.cloneNode(true));
     const clonesAfter = this.slides.slice(0, this.perView).map(n => n.cloneNode(true));
 
@@ -63,8 +65,13 @@ cloneSlides() {
     this.lazyLoad();
   }
 
-  next() { this.goTo(this.index + 1); }
-  prev() { this.goTo(this.index - 1); }
+  next() { 
+    this.goTo(this.index + 1); 
+  }
+
+  prev() { 
+    this.goTo(this.index - 1); 
+  }
 
   createPagination() {
     this.dots = [];
@@ -97,6 +104,7 @@ cloneSlides() {
     window.addEventListener('resize', () => this.setupResponsive());
 
     this.track.addEventListener('transitionend', () => {
+      this.isAnimating = false;
       if (this.index <= this.perView - 1) {
         this.goTo(this.slides.length - 2 * this.perView, false);
       }
@@ -121,11 +129,15 @@ cloneSlides() {
     this.el.addEventListener('mouseenter', () => this.stopAuto());
     this.el.addEventListener('mouseleave', () => this.startAuto());
   }
- start(e) {
+
+  start(e) {
+    if (this.isAnimating) return; // Prevent interaction during animation
+    
     this.stopAuto();
     this.dragging = true;
+    this.velocity = 0; // Reset velocity on new touch
 
-    this.startX = e.touches ? e.touches[0].clientX : e.clientX;
+    this.startX = e.touches ? e.touches.clientX : e.clientX;
     this.lastX = this.startX;
     this.lastTime = Date.now();
 
@@ -136,7 +148,7 @@ cloneSlides() {
     if (!this.dragging) return;
     if (e.cancelable) e.preventDefault();
 
-    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    const x = e.touches ? e.touches.clientX : e.clientX;
     const dx = x - this.startX;
 
     const now = Date.now();
@@ -148,16 +160,25 @@ cloneSlides() {
     this.track.style.transform =
       `translateX(-${this.index * this.slideWidth - dx}px)`;
   }
- end() {
+
+  end(e) {
     if (!this.dragging) return;
     this.dragging = false;
+    this.isAnimating = true;
 
-    // inertia
+    // Only apply momentum if swipe distance is significant
+    const totalDx = this.lastX - this.startX;
     const momentum = this.velocity * 200;
 
-    if (momentum > 50) this.prev();
-    else if (momentum < -50) this.next();
-    else this.goTo(this.index);
+    // Require minimum movement to trigger swipe
+    if (Math.abs(totalDx) > 30 && Math.abs(momentum) > 50) {
+      if (momentum > 50) this.prev();
+      else if (momentum < -50) this.next();
+      else this.goTo(this.index);
+    } else {
+      // Tap detected - just snap back to current slide
+      this.goTo(this.index);
+    }
 
     this.startAuto();
   }
