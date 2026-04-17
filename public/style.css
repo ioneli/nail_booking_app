@@ -13,7 +13,7 @@
 background:black;
 opacity:0.98;
 padding:10px;
-width: 110%;
+width: 100%;
 height:130%; 
 position:absolute;
 margin:auto;
@@ -24,8 +24,8 @@ z-index: 998;
 display:block;
 }
 .nav-btn{height:100px;z-index:999;bottom:60%;position:fixed;font-weight:bold;font-size:50px;}
-.next-btn{right:3%;}
-.prev-btn{left:3%;}
+.next-btn{right:3%;background:grey;}
+.prev-btn{left:3%;background:grey;}
 .example{cursor:pointer;}
 .example img{pointer-events:none;}
 #colection .album {
