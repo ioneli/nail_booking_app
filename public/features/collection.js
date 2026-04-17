@@ -136,6 +136,7 @@ document.addEventListener("touchend", () => {
 function openFullScreen(element) {
   currentFullScreenElement = element;
   element.classList.add("fullScreen");
+  element.classList.remove("example");
   document.documentElement.style.overflow = 'hidden';
   window.scrollTo(0, 0);
 
@@ -190,6 +191,7 @@ function navigateTo(currentElement, direction, buttonContainer) {
 
 function closeFullScreen(element, buttonContainer) {
   element.classList.remove("fullScreen");
+  element.classList.add("example");
   buttonContainer.remove();
   document.documentElement.style.overflow = 'auto';
   currentFullScreenElement = null;
