@@ -23,7 +23,7 @@ object-fit:cover;
 z-index: 998;
 display:block;
 }
-.nav-btn{height:100px;z-index:999;bottom:60%;position:fixed;font-weight:bold;font-size:50px;}
+.nav-btn{height:100px;z-index:999;bottom:40%;position:fixed;font-weight:bold;font-size:50px;opacity:0.8;}
 .next-btn{right:3%;background:grey;}
 .prev-btn{left:3%;background:grey;}
 .example{cursor:pointer;}
