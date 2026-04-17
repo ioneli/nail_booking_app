@@ -15,7 +15,6 @@ export default class AdvancedSwiper {
     this.velocity = 0;
     this.lastX = 0;
     this.lastTime = 0;
-    this.dragging = false;
 
     this.init();
   }
@@ -40,7 +39,7 @@ export default class AdvancedSwiper {
     });
   }
 
-  cloneSlides() {
+cloneSlides() {
     const clonesBefore = this.slides.slice(-this.perView).map(n => n.cloneNode(true));
     const clonesAfter = this.slides.slice(0, this.perView).map(n => n.cloneNode(true));
 
@@ -64,13 +63,8 @@ export default class AdvancedSwiper {
     this.lazyLoad();
   }
 
-  next() { 
-    this.goTo(this.index + 1); 
-  }
-
-  prev() { 
-    this.goTo(this.index - 1); 
-  }
+  next() { this.goTo(this.index + 1); }
+  prev() { this.goTo(this.index - 1); }
 
   createPagination() {
     this.dots = [];
@@ -127,13 +121,11 @@ export default class AdvancedSwiper {
     this.el.addEventListener('mouseenter', () => this.stopAuto());
     this.el.addEventListener('mouseleave', () => this.startAuto());
   }
-
-  start(e) {
+ start(e) {
     this.stopAuto();
     this.dragging = true;
-    this.velocity = 0; // Reset velocity on new touch
 
-    this.startX = e.touches ? e.touches.clientX : e.clientX;
+    this.startX = e.touches ? e.touches[0].clientX : e.clientX;
     this.lastX = this.startX;
     this.lastTime = Date.now();
 
@@ -144,7 +136,7 @@ export default class AdvancedSwiper {
     if (!this.dragging) return;
     if (e.cancelable) e.preventDefault();
 
-    const x = e.touches ? e.touches.clientX : e.clientX;
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
     const dx = x - this.startX;
 
     const now = Date.now();
@@ -156,24 +148,16 @@ export default class AdvancedSwiper {
     this.track.style.transform =
       `translateX(-${this.index * this.slideWidth - dx}px)`;
   }
-
-  end(e) {
+ end() {
     if (!this.dragging) return;
     this.dragging = false;
 
-    // Only apply momentum if swipe distance is significant
-    const totalDx = this.lastX - this.startX;
+    // inertia
     const momentum = this.velocity * 200;
 
-    // Require minimum movement to trigger swipe
-    if (Math.abs(totalDx) > 30 && Math.abs(momentum) > 50) {
-      if (momentum > 50) this.prev();
-      else if (momentum < -50) this.next();
-      else this.goTo(this.index);
-    } else {
-      // Tap detected - just snap back to current slide
-      this.goTo(this.index);
-    }
+    if (momentum > 50) this.prev();
+    else if (momentum < -50) this.next();
+    else this.goTo(this.index);
 
     this.startAuto();
   }
