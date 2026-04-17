@@ -67,11 +67,11 @@ export default class AdvancedSwiper {
   }
 
   next() { 
-    this.goTo(this.index + 1); 
+    if (!this.isAnimating) this.goTo(this.index + 1); 
   }
 
   prev() { 
-    this.goTo(this.index - 1); 
+    if (!this.isAnimating) this.goTo(this.index - 1); 
   }
 
   createPagination() {
