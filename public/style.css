@@ -8,7 +8,10 @@
 /*colection*/
 .X{background:red;opacity:0.6;position:absolute;z-index:998;top:3%;right:3%;border-radius:50%;width:50px;font-weight:bold;height:50px;}
 .example img{margin:2px;width:120px;height:120px;}
-.fullScreen img{width:100%;object-fit:contain; object-position: center;}
+.fullScreen img{max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;}
 .fullScreen{
 background:black;
 opacity:0.98;
@@ -16,13 +19,12 @@ padding:10px;
 width: 100vw;
   height:100vh;
 height:100dvh; 
-position:fixed;
-margin:auto;
-top:0;
-left:0;
-object-fit:cover;
+position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 z-index: 998;
-display:block;
 }
 .nav-btn{height:100px;z-index:999;bottom:40%;position:fixed;font-weight:bold;font-size:50px;opacity:0.8;}
 .next-btn{right:3%;background:grey;}
