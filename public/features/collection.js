@@ -207,8 +207,8 @@ function navigateTo(currentElement, direction, buttonContainer) {
       });
 
     }, 200);
-  }
-}
+  
+
    closeFullScreen(currentElement, buttonContainer);
     openFullScreen(sibling);
   }
