@@ -25,7 +25,7 @@ position: fixed;
   justify-content: center;
   align-items: center;
 z-index: 998;
-   transition: all 0.25s ease;
+   transition: all 0.5s ease;
 }
 .nav-btn{height:100px;z-index:999;bottom:40%;position:fixed;font-weight:bold;font-size:50px;opacity:0.8;}
 .next-btn{right:3%;background:grey;}
