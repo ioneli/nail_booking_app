@@ -124,7 +124,7 @@ cloneSlides() {
  start(e) {
     this.stopAuto();
     this.dragging = true;
-
+    this.isDraggingReal = false;
     this.startX = e.touches ? e.touches[0].clientX : e.clientX;
     this.lastX = this.startX;
     this.lastTime = Date.now();
@@ -134,11 +134,16 @@ cloneSlides() {
 
   move(e) {
     if (!this.dragging) return;
-    if (e.cancelable) e.preventDefault();
+    
 
     const x = e.touches ? e.touches[0].clientX : e.clientX;
     const dx = x - this.startX;
-
+     if (Math.abs(dx) > 5) {
+    this.isDraggingReal = true;
+     }
+    if (this.isDraggingReal && e.cancelable) {
+    e.preventDefault();
+    }
     const now = Date.now();
     this.velocity = (x - this.lastX) / (now - this.lastTime);
 
@@ -151,7 +156,10 @@ cloneSlides() {
  end() {
     if (!this.dragging) return;
     this.dragging = false;
-
+    if (!this.isDraggingReal) {
+    this.startAuto();
+    return;
+    }
     // inertia
     const momentum = this.velocity * 200;
 
