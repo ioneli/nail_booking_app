@@ -184,7 +184,32 @@ function navigateTo(currentElement, direction, buttonContainer) {
     : currentElement.previousElementSibling;
 
   if (sibling && sibling.classList.contains("example")) {
-    closeFullScreen(currentElement, buttonContainer);
+   currentElement.style.transform = direction === "next"
+      ? "translateX(-50px)"
+      : "translateX(50px)";
+    currentElement.style.opacity = "0";
+   setTimeout(() => {
+      closeFullScreen(currentElement, buttonContainer);
+
+      //  pregătim următorul element (intră din lateral)
+      sibling.style.transform = direction === "next"
+        ? "translateX(50px)"
+        : "translateX(-50px)";
+      sibling.style.opacity = "0";
+
+      openFullScreen(sibling);
+
+      //  animăm intrarea
+      requestAnimationFrame(() => {
+        sibling.style.transition = "transform 0.25s ease, opacity 0.25s ease";
+        sibling.style.transform = "translateX(0)";
+        sibling.style.opacity = "1";
+      });
+
+    }, 200);
+  }
+}
+   closeFullScreen(currentElement, buttonContainer);
     openFullScreen(sibling);
   }
 }
