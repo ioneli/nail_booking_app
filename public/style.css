@@ -6,6 +6,8 @@
   font-family: 'Segoe UI', sans-serif;
 }
 /*colection*/
+about{display:block; background:grey;color:black; opacity:0.8;}
+about h{width:100%;font-weight:bold;font-size:15px;}
 .X{background:red;opacity:0.6;position:absolute;z-index:998;top:3%;right:3%;border-radius:50%;width:50px;font-weight:bold;height:50px;}
 .example img{margin:2px;width:120px;height:120px;}
 .fullScreen img{max-width: 100%;
