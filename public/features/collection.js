@@ -104,16 +104,16 @@ document.getElementById("colection").addEventListener("click", (e) => {
 // Touch event listeners for swipe
 document.addEventListener("touchstart", (e) => {
   if (currentFullScreenElement) {
-    startX = e.touches.clientX;
-    startY = e.touches.clientY;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
     isSwiping = true;
   }
 });
 
 document.addEventListener("touchmove", (e) => {
   if (!isSwiping) return;
-  const deltaX = e.touches.clientX - startX;
-  const deltaY = e.touches.clientY - startY;
+  const deltaX = e.touches[0].clientX - startX;
+  const deltaY = e.touches[0].clientY - startY;
   
   // Only trigger if horizontal swipe is significant (ignore vertical scrolling)
   if (Math.abs(deltaX) > 50 && Math.abs(deltaY) < 30) {
